@@ -1,0 +1,2290 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-16208314508"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-16208314508');
+  </script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>BullishBharat – Live IPO &amp; GMP Hub</title>
+  <meta name="description"
+    content="Live IPO list, grey market premium (GMP), subscription status, IPO calendar, allotment links and profit calculator for the Indian market.">
+
+  <!-- Font + Tailwind (play CDN, pinned version) -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Noto+Sans+Devanagari:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    // Colors come from CSS variables below, so light and dark mode both work
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: 'var(--bg)', card: 'var(--card)', line: 'var(--line)',
+            ink: 'var(--ink)', mute: 'var(--mute)', soft: 'var(--soft)', pill: 'var(--pill)',
+            up: 'var(--up)', down: 'var(--down)', brand: '#059669'
+          },
+          fontFamily: { sans: ['Plus Jakarta Sans', 'Noto Sans Devanagari', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ===== THEME COLORS: edit here to re-skin the site ===== */
+    :root {
+      color-scheme: light;
+      --bg: #f9fafb;
+      --card: #ffffff;
+      --line: #e5e7eb;
+      --ink: #111827;
+      --mute: #6b7280;
+      --soft: #f0fdf4;
+      --pill: #f3f4f6;
+      --up: #10b981;
+      --down: #f43f5e;
+      --accent-sky: #0284c7;
+      --accent-violet: #7c3aed;
+      --accent-amber: #d97706;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #0b0f19;
+      --card: #111827;
+      --line: #1f2937;
+      --ink: #f3f4f6;
+      --mute: #9ca3af;
+      --soft: #162033;
+      --pill: #1a2332;
+      --up: #34d399;
+      --down: #fb7185;
+      --accent-sky: #38bdf8;
+      --accent-violet: #a78bfa;
+      --accent-amber: #fbbf24;
+    }
+
+    html {
+      scroll-padding-top: env(safe-area-inset-top, 0px);
+    }
+
+    /* ===== ANIMATIONS: live dot ===== */
+    @keyframes pulse {
+      50% {
+        opacity: .3;
+      }
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 9999px;
+      background: var(--up);
+      animation: pulse 1.6s infinite;
+    }
+
+    .gmp-trend-point .gmp-trend-tooltip {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .12s ease;
+    }
+
+    .gmp-trend-point:hover .gmp-trend-tooltip,
+    .gmp-trend-point:focus .gmp-trend-tooltip {
+      opacity: 1;
+    }
+
+    .gmp-trend-point:focus {
+      outline: none;
+    }
+
+    .gmp-trend-point > circle:not(.gmp-trend-hit) {
+      transition: r .15s ease;
+    }
+
+    .gmp-trend-point:hover > circle:not(.gmp-trend-hit),
+    .gmp-trend-point:focus > circle:not(.gmp-trend-hit) {
+      r: 7px;
+    }
+
+    /* Sticky header must not slide under a phone's status bar */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0 0 auto;
+      height: env(safe-area-inset-top, 0px);
+      background: var(--card);
+      z-index: 45;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .live-dot {
+        animation: none;
+      }
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+    }
+  </style>
+</head>
+
+<body class="font-sans text-[15px] leading-relaxed">
+
+  <!-- ================= HEADER ================= -->
+  <header class="sticky z-40 border-b border-line bg-card" style="top: env(safe-area-inset-top, 0px)">
+    <div class="mx-auto max-w-7xl px-4">
+      <div class="flex h-16 items-center justify-between gap-3">
+        <!-- Logo -->
+        <a href="/" data-page="" class="flex shrink-0 items-center gap-3 text-ink no-underline">
+          <div
+            class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-xl font-black text-white shadow-lg">
+            <i class="fa-solid fa-arrow-trend-up"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-xl font-extrabold tracking-tight">Bullish<span
+                  class="text-emerald-500">Bharat</span></span>
+              <span
+                class="rounded border border-amber-500/20 bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-amber-600">Live</span>
+            </div>
+            <p class="text-[10px] font-medium text-mute">India’s Smart IPO &amp; Earnings Radar</p>
+          </div>
+        </a>
+
+        <!-- Main menu (desktop). On phones the same buttons appear in the row below. -->
+        <nav id="nav" class="hidden space-x-1 text-sm font-semibold lg:flex" aria-label="Main">
+        </nav>
+
+        <!-- Language, watchlist, theme -->
+        <div class="flex shrink-0 items-center gap-2">
+          <button id="lang-btn" class="rounded-xl border border-line px-3 py-1.5 text-sm font-bold">हिंदी</button>
+          <button data-view="watch" aria-label="Watchlist"
+            class="grid h-9 w-9 place-items-center rounded-xl border border-line"><i
+              class="fa-regular fa-star text-amber-400"></i></button>
+          <!-- Theme toggle: moon = switch to dark, sun = switch back to light -->
+          <button id="theme-btn" class="grid h-9 w-9 place-items-center rounded-xl border border-line text-ink"
+            aria-label="Switch to dark mode"></button>
+        </div>
+      </div>
+      <div id="nav-mobile" class="flex gap-2 overflow-x-auto py-2 text-xs font-semibold lg:hidden"></div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-4 pb-10">
+    <div id="home"> <!-- everything on the home page -->
+
+      <!-- ================= SPONSORED STRIP ================= -->
+      <aside aria-label="Sponsored" class="mt-4">
+        <div
+          class="flex flex-col items-center justify-between rounded-xl border border-dashed border-line bg-card px-4 py-3 text-xs sm:flex-row">
+          <div class="mb-2 flex items-center gap-3 sm:mb-0">
+            <span class="rounded bg-blue-600 px-1.5 py-0.5 text-[10px] font-extrabold text-white">SPONSORED</span>
+            <span class="font-medium text-mute">Open a demat account to apply for IPOs. Partner links; offers may
+              change.</span>
+          </div>
+          <button data-view="brokers" class="whitespace-nowrap font-bold text-emerald-600">See partners <i
+              class="fa-solid fa-arrow-right ml-1"></i></button>
+        </div>
+      </aside>
+
+      <!-- ================= IPO LIST VIEW ================= -->
+      <div id="view-ipos">
+
+        <!-- ================= TITLE ================= -->
+        <div class="mt-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-2xl font-extrabold tracking-tight sm:text-3xl">Current IPO GMP Today</h1>
+              <span class="relative flex h-3 w-3">
+                <span
+                  class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex h-3 w-3 rounded-full bg-emerald-500"></span>
+              </span>
+            </div>
+            <p class="mt-1 text-sm text-mute">IPO data refreshes about every 15 minutes. GMP is unofficial and may be delayed.</p>
+          </div>
+        </div>
+
+        <!-- ================= FILTERS + SEARCH ================= -->
+        <div
+          class="mt-5 flex flex-col justify-between gap-4 rounded-xl border border-line bg-card p-4 shadow-sm lg:flex-row lg:items-center">
+          <div class="relative max-w-md flex-grow">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-mute"></i>
+            <input id="search" type="search" placeholder="Search company (e.g. Swiggy, Tata, NTPC Green)..."
+              class="w-full rounded-lg border border-line bg-bg py-2 pl-10 pr-4 text-sm">
+          </div>
+          <div class="flex flex-wrap items-center gap-2 text-xs font-semibold">
+            <span class="mr-1 hidden text-mute sm:inline">Filter By:</span>
+            <button data-filter="ALL" class="rounded-lg bg-pill px-3 py-1.5">All IPOs</button>
+            <button data-filter="OPEN" class="rounded-lg bg-pill px-3 py-1.5">Open Now</button>
+            <button data-filter="UPCOMING" class="rounded-lg bg-pill px-3 py-1.5">Upcoming</button>
+            <button data-filter="CLOSED" class="rounded-lg bg-pill px-3 py-1.5">Closed</button>
+            <button data-filter="MAINBOARD" class="rounded-lg bg-pill px-3 py-1.5">Mainboard</button>
+            <button data-filter="SME" class="rounded-lg bg-pill px-3 py-1.5">SME IPOs</button>
+          </div>
+        </div>
+
+        <!-- ================= IPO TABLE ================= -->
+        <div class="mt-4 overflow-hidden rounded-xl border border-line bg-card shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[860px] border-collapse text-left text-sm">
+              <thead class="border-b border-line bg-pill text-[11px] font-bold uppercase tracking-wider text-mute">
+                <tr>
+                  <th class="px-4 py-3.5">IPO name &amp; category</th>
+                  <th class="px-3 py-3.5 text-right">Price band</th>
+                  <th class="px-3 py-3.5 text-right">Current GMP</th>
+                  <th class="px-3 py-3.5 text-right">Est. listing</th>
+                  <th class="px-3 py-3.5 text-right">Est. gain (%)</th>
+                  <th class="px-3 py-3.5 text-right">Profit / lot</th>
+                  <th class="px-3 py-3.5 text-center">Status</th>
+                  <th class="px-4 py-3.5 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody id="ipo-table-body"><!-- Injected via JavaScript --></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ================= PARTNER BANNER ================= -->
+        <div
+          class="mt-6 flex flex-col items-center justify-between gap-4 rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-blue-500/10 via-emerald-500/10 to-purple-500/10 p-5 md:flex-row">
+          <div class="space-y-1 text-center md:text-left">
+            <span
+              class="inline-block rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider text-emerald-600">Partner
+              offer</span>
+            <h2 class="text-lg font-bold">Apply for IPOs with UPI from your broker app</h2>
+            <p class="text-xs text-mute">Open a demat account with one of our partners. Partner links; we may earn a
+              commission at no extra cost to you.</p>
+          </div>
+          <div id="partners" class="flex shrink-0 flex-wrap items-center justify-center gap-2"></div>
+        </div>
+      </div>
+
+      <!-- ================= OTHER VIEWS (dividends, earnings, calendar, calculator, brokers, allotment, watchlist) ================= -->
+      <div id="view-other" class="hidden pt-6"></div>
+
+    </div>
+
+    <!-- ================= INFO PAGES (About, Privacy, Disclaimer, Contact) ================= -->
+    <article id="page" class="mx-auto hidden max-w-3xl py-8"></article>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="mt-12 border-t border-line bg-card">
+    <div class="mx-auto max-w-7xl space-y-8 px-4 py-10">
+      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <section>
+          <a href="/" data-page="" class="inline-flex items-center gap-2 font-extrabold text-ink no-underline">
+            <span class="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-white">
+              <i class="fa-solid fa-arrow-trend-up"></i>
+            </span>
+            <span class="text-base">Bullish<span class="text-emerald-500">Bharat</span></span>
+          </a>
+          <p class="mt-3 max-w-xs text-xs leading-relaxed text-mute">Your dashboard for Indian IPOs, corporate actions and market dates.</p>
+          <a href="mailto:rupeshk0155@gmail.com" class="mt-4 inline-flex items-center gap-2 font-semibold text-emerald-600 hover:underline">
+            <i class="fa-regular fa-envelope"></i> Contact us
+          </a>
+        </section>
+
+        <nav class="grid content-start gap-2 text-sm" aria-label="Dashboard links">
+          <h2 class="mb-1 text-xs font-extrabold uppercase tracking-wider text-ink">Explore</h2>
+          <a href="/ipo-gmp" data-view="ipo" class="hover:text-emerald-600">IPO GMP Tracker</a>
+          <a href="/dividends-bonus" data-view="dividends" class="hover:text-emerald-600">Dividends &amp; Bonus</a>
+          <a href="/calendar" data-view="calendar" class="hover:text-emerald-600">Calendar</a>
+          <a href="/lot-calculator" data-view="calc" class="hover:text-emerald-600">Lot Calculator</a>
+          <a href="/allotment-status" data-view="allot" class="hover:text-emerald-600">Allotment status</a>
+        </nav>
+
+        <section>
+          <h2 class="mb-3 text-xs font-extrabold uppercase tracking-wider text-ink">Data &amp; updates</h2>
+          <ul class="space-y-2 text-xs leading-relaxed">
+            <li><span class="font-semibold text-ink">IPO &amp; GMP:</span> NSE, BSE and public market sources · about every 15 minutes</li>
+            <li><span class="font-semibold text-ink">Results &amp; corporate actions:</span> Moneycontrol and BSE · about every 3 hours</li>
+            <li><span class="font-semibold text-ink">Market holidays:</span> NSE · checked about every 12 hours</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="mb-3 text-xs font-extrabold uppercase tracking-wider text-ink">Share this dashboard</h2>
+          <div class="flex gap-2">
+            <a id="share-whatsapp" href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp"
+              class="grid h-10 w-10 place-items-center rounded-xl border border-line text-lg text-emerald-600 transition hover:border-emerald-500 hover:bg-emerald-500/10"><i class="fa-brands fa-whatsapp"></i></a>
+            <a id="share-x" href="https://twitter.com/intent/tweet" target="_blank" rel="noopener noreferrer" aria-label="Share on X"
+              class="grid h-10 w-10 place-items-center rounded-xl border border-line text-lg text-ink transition hover:border-ink hover:bg-soft"><i class="fa-brands fa-x-twitter"></i></a>
+            <a id="share-linkedin" href="https://www.linkedin.com/sharing/share-offsite/" target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn"
+              class="grid h-10 w-10 place-items-center rounded-xl border border-line text-lg text-blue-600 transition hover:border-blue-500 hover:bg-blue-500/10"><i class="fa-brands fa-linkedin-in"></i></a>
+          </div>
+          <a href="mailto:rupeshk0155@gmail.com" class="mt-4 block break-all text-xs text-mute hover:text-emerald-600">rupeshk0155@gmail.com</a>
+        </section>
+      </div>
+
+      <section class="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-ink sm:p-5">
+        <div class="flex items-start gap-3">
+          <i class="fa-solid fa-shield-halved mt-0.5 text-base text-amber-500"></i>
+          <div>
+            <h2 class="text-xs font-extrabold uppercase tracking-wide">GMP &amp; SEBI notice</h2>
+            <p class="mt-1 text-xs leading-relaxed text-mute">BullishBharat is an information website and is not a SEBI-registered investment adviser or research analyst. GMP is unofficial, unverified grey-market information. It is not published by SEBI or the exchanges and is not a guarantee of listing price. Nothing here is a recommendation to buy, sell or apply. Read the offer document (RHP) and speak to a SEBI-registered adviser before you invest.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="flex flex-col items-center justify-between gap-4 border-t border-line pt-5 text-xs sm:flex-row">
+        <p>© <span id="copyright-year">2026</span> BullishBharat</p>
+        <nav class="flex flex-wrap justify-center gap-x-4 gap-y-2 font-medium" aria-label="Legal links">
+          <a href="/about" data-page="about" class="hover:text-emerald-600">About</a>
+          <a href="/privacy" data-page="privacy" class="hover:text-emerald-600">Privacy Policy</a>
+          <a href="/disclaimer" data-page="disclaimer" class="hover:text-emerald-600">Disclaimer</a>
+          <a href="/contact" data-page="contact" class="hover:text-emerald-600">Contact</a>
+        </nav>
+        <button id="back-to-top" type="button" class="inline-flex items-center gap-2 rounded-lg border border-line px-3 py-2 font-semibold text-ink transition hover:border-emerald-500 hover:text-emerald-600">
+          <i class="fa-solid fa-arrow-up"></i> Back to top
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // =====================================================
+    // 1. DATA
+    // Key legend: n=name, s=status (open|upcoming|closed), sec=sector,
+    // lo/hi=price band, lot=lot size, size=issue size (Rs crore), gmp=premium (Rs),
+    // h=GMP history, open/close/allot/list=dates, sub=[QIB, NII, Retail, Total],
+    // ab=about, obj=objectives, fin=[year, revenue, PAT], sh=[holder, pre %, post %],
+    // st=strengths, rk=risks
+    // =====================================================
+    const SAMPLE_IPOS = [
+      {
+        "id": "aarav",
+        "n": "Aarav Foods Ltd",
+        "s": "open",
+        "sec": "FMCG",
+        "lo": 180,
+        "hi": 190,
+        "lot": 78,
+        "size": 640,
+        "gmp": 42,
+        "h": [
+          18,
+          22,
+          27,
+          31,
+          35,
+          39,
+          42
+        ],
+        "open": "28 Oct 2026",
+        "close": "30 Oct 2026",
+        "allot": "3 Nov 2026",
+        "list": "6 Nov 2026",
+        "sub": [
+          3.2,
+          1.8,
+          6.4,
+          3.9
+        ],
+        "ab": "Aarav Foods makes packaged snacks and ready-to-cook mixes sold across 22 states through 1,400 distributors.",
+        "obj": [
+          "Repay borrowings of ₹220 cr",
+          "Set up a new plant in Gujarat (₹260 cr)",
+          "General corporate purposes"
+        ],
+        "fin": [
+          [
+            2024,
+            820,
+            41
+          ],
+          [
+            2025,
+            1010,
+            63
+          ],
+          [
+            2026,
+            1240,
+            88
+          ]
+        ],
+        "sh": [
+          [
+            "Promoters",
+            78.4,
+            58.2
+          ],
+          [
+            "Public",
+            21.6,
+            41.8
+          ]
+        ],
+        "st": [
+          "Strong regional brands with repeat buyers",
+          "Asset-light distribution network",
+          "PAT margin up from 5% to 7.1% in two years"
+        ],
+        "rk": [
+          "Raw-material (wheat, palm oil) price swings",
+          "Heavy dependence on three states",
+          "Valuation looks full versus listed peers"
+        ]
+      },
+      {
+        "id": "nexa",
+        "n": "NexaGrid Power Ltd",
+        "s": "open",
+        "sec": "Power & Energy",
+        "lo": 310,
+        "hi": 326,
+        "lot": 46,
+        "size": 1450,
+        "gmp": 18,
+        "h": [
+          30,
+          26,
+          24,
+          22,
+          21,
+          19,
+          18
+        ],
+        "open": "27 Oct 2026",
+        "close": "29 Oct 2026",
+        "allot": "2 Nov 2026",
+        "list": "5 Nov 2026",
+        "sub": [
+          5.8,
+          2.4,
+          1.9,
+          3.7
+        ],
+        "ab": "NexaGrid builds and operates solar-plus-storage plants and sells power to state utilities under long-term contracts.",
+        "obj": [
+          "Fund 600 MW of solar capacity",
+          "Pay down project debt",
+          "General corporate purposes"
+        ],
+        "fin": [
+          [
+            2024,
+            1520,
+            120
+          ],
+          [
+            2025,
+            2040,
+            190
+          ],
+          [
+            2026,
+            2610,
+            265
+          ]
+        ],
+        "sh": [
+          [
+            "Promoters",
+            64,
+            49.5
+          ],
+          [
+            "PE investors",
+            22,
+            12
+          ],
+          [
+            "Public",
+            14,
+            38.5
+          ]
+        ],
+        "st": [
+          "Long-term power purchase agreements",
+          "Growing order book",
+          "Experienced promoter group"
+        ],
+        "rk": [
+          "Payment delays from state utilities",
+          "High debt",
+          "Policy and tariff changes"
+        ]
+      },
+      {
+        "id": "kavya",
+        "n": "Kavya Pharma Ltd",
+        "s": "upcoming",
+        "sec": "Pharma",
+        "lo": 420,
+        "hi": 440,
+        "lot": 34,
+        "size": 980,
+        "gmp": 65,
+        "h": [
+          40,
+          46,
+          50,
+          55,
+          58,
+          62,
+          65
+        ],
+        "open": "2 Nov 2026",
+        "close": "4 Nov 2026",
+        "allot": "9 Nov 2026",
+        "list": "12 Nov 2026",
+        "sub": null,
+        "ab": "Kavya Pharma develops generic formulations and active ingredients, exporting to 40 countries.",
+        "obj": [
+          "Expand API manufacturing",
+          "R&D for complex generics",
+          "Working capital"
+        ],
+        "fin": [
+          [
+            2024,
+            1100,
+            150
+          ],
+          [
+            2025,
+            1340,
+            205
+          ],
+          [
+            2026,
+            1690,
+            270
+          ]
+        ],
+        "sh": [
+          [
+            "Promoters",
+            71,
+            55
+          ],
+          [
+            "Public",
+            29,
+            45
+          ]
+        ],
+        "st": [
+          "US FDA-approved plants",
+          "Diverse export base",
+          "Rising R&D pipeline"
+        ],
+        "rk": [
+          "Pricing pressure in US generics",
+          "Regulatory inspections",
+          "Currency swings"
+        ]
+      },
+      {
+        "id": "urban",
+        "n": "UrbanNest Realty Ltd",
+        "s": "upcoming",
+        "sec": "Real Estate",
+        "lo": 95,
+        "hi": 100,
+        "lot": 150,
+        "size": 420,
+        "gmp": -3,
+        "h": [
+          4,
+          3,
+          2,
+          0,
+          -1,
+          -2,
+          -3
+        ],
+        "open": "5 Nov 2026",
+        "close": "9 Nov 2026",
+        "allot": "12 Nov 2026",
+        "list": "16 Nov 2026",
+        "sub": null,
+        "ab": "UrbanNest develops mid-income housing in Pune, Nashik and Nagpur with 9 projects under construction.",
+        "obj": [
+          "Land acquisition",
+          "Construction costs",
+          "Debt repayment"
+        ],
+        "fin": [
+          [
+            2024,
+            310,
+            12
+          ],
+          [
+            2025,
+            420,
+            22
+          ],
+          [
+            2026,
+            505,
+            31
+          ]
+        ],
+        "sh": [
+          [
+            "Promoters",
+            85,
+            65
+          ],
+          [
+            "Public",
+            15,
+            35
+          ]
+        ],
+        "st": [
+          "Affordable-housing focus",
+          "Low land cost in tier-2 cities",
+          "Consistent presales"
+        ],
+        "rk": [
+          "Cyclical demand",
+          "Approval delays",
+          "Thin margins"
+        ]
+      },
+      {
+        "id": "zenith",
+        "n": "Zenith Fintech Ltd",
+        "s": "closed",
+        "sec": "Fintech",
+        "lo": 240,
+        "hi": 255,
+        "lot": 58,
+        "size": 870,
+        "gmp": 30,
+        "h": [
+          55,
+          50,
+          44,
+          40,
+          36,
+          33,
+          30
+        ],
+        "open": "20 Oct 2026",
+        "close": "22 Oct 2026",
+        "allot": "26 Oct 2026",
+        "list": "29 Oct 2026",
+        "sub": [
+          44.2,
+          31.5,
+          12.8,
+          28.6
+        ],
+        "ab": "Zenith runs a digital lending and payments platform for small merchants, with 3.2 million active users.",
+        "obj": [
+          "Raise Tier-1 capital",
+          "Technology and cloud spend",
+          "Marketing"
+        ],
+        "fin": [
+          [
+            2024,
+            540,
+            -30
+          ],
+          [
+            2025,
+            780,
+            22
+          ],
+          [
+            2026,
+            1050,
+            96
+          ]
+        ],
+        "sh": [
+          [
+            "Promoters",
+            52,
+            38
+          ],
+          [
+            "VC funds",
+            30,
+            22
+          ],
+          [
+            "Public",
+            18,
+            40
+          ]
+        ],
+        "st": [
+          "Fast user growth",
+          "Turned profitable in FY25",
+          "Low customer acquisition cost"
+        ],
+        "rk": [
+          "RBI digital-lending rules",
+          "Credit losses",
+          "Competition"
+        ]
+      },
+      {
+        "id": "ganga",
+        "n": "Ganga Steel & Alloys",
+        "s": "closed",
+        "sec": "Metals",
+        "lo": 128,
+        "hi": 135,
+        "lot": 110,
+        "size": 510,
+        "gmp": -6,
+        "h": [
+          10,
+          6,
+          2,
+          0,
+          -2,
+          -4,
+          -6
+        ],
+        "open": "15 Oct 2026",
+        "close": "19 Oct 2026",
+        "allot": "22 Oct 2026",
+        "list": "26 Oct 2026",
+        "sub": [
+          1.4,
+          0.9,
+          1.6,
+          1.3
+        ],
+        "ab": "Ganga makes alloy steel bars and forgings for auto and rail customers from two plants in Jharkhand.",
+        "obj": [
+          "Modernise furnaces",
+          "Repay debt",
+          "General corporate purposes"
+        ],
+        "fin": [
+          [
+            2024,
+            980,
+            35
+          ],
+          [
+            2025,
+            1010,
+            28
+          ],
+          [
+            2026,
+            1090,
+            31
+          ]
+        ],
+        "sh": [
+          [
+            "Promoters",
+            90,
+            70
+          ],
+          [
+            "Public",
+            10,
+            30
+          ]
+        ],
+        "st": [
+          "Long-time auto OEM clients",
+          "Integrated plant",
+          "Low-cost power"
+        ],
+        "rk": [
+          "Cyclical steel prices",
+          "Customer concentration",
+          "Flat profit growth"
+        ]
+      }
+    ];
+
+    // Partner brokers. Put YOUR affiliate/referral link in `link` (these are the brokers' home pages for now).
+    const BROKERS = [
+      { name: 'Zerodha', offer: 'Open a demat account', btn: 'bg-emerald-600 hover:bg-emerald-700', link: 'https://zerodha.com', logo: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD4AAABACAYAAABC6cT1AAAIl0lEQVR42u2bf4hcVxXHv99775uZnd1N2uZH7S9ag9aQH03SySYxUJMo/kChKjoDEX+B0KKoFVFsaJK3r60SCRapija0qIgQ5gn+ERXFQnbRpjXNZJMSUoQ0YNUUmpQsye7OzHv33uMfM5NssrPb/Gjp7oz3n4EZeO99zvfcc8495w3QpYuz8qlCUZswpN6uyw8Pbnb4v+LXtISQyVcigAvfXOWlhCClEB7Ka8+Hlc7eL95mAVYbV5br9gAROJ3Ja5/UHjJX7n6hKi4f5MlnK6p6S449r9VkydnYxyy5i78LT56tqOqpHBfhtB/GZo+I/sokoABABYXaxtpzu12P+TdEdmZ6Fyz1PoHYFFT6+sC9g8n2ol6fWMA3U6FYitWyZUWJpgMQIWIolNh23xSLZQ0AcbnoW3BXujaF+/vqsuB7UPwWwT7vrCVwPco7nc1rV5/4FNspiyiaArkuPHq7srJCNN8HkfdSmXkQlxdBLwBFsiri60qbmnf2DYgc1mKeP/D9la+0NdYklacLcC1vGXik8jFjsk9Tm9t8WvMg1bW5ujiT7dWuPn7/tIoXdr0yX42f+6ACP0RiA8DFArlBKdOvs30AFSAOIgKINJ6FBKngvYWrnU+FfJ1eXhORF7zHH86ePzV04icfr09S1AxjyLczdMtAhQf3mMqeB9OB7SPLtTK/0pncWpdUHcQrkHwLwIUIBzmQfuZepd0XQbVVKbUQUKAOGpDeQbwTETgSInJ5cBSQlIYdaJQKAKUh3kJcKiJyhuCfRbg3p92B4WjN6AUDRFvsDC5vhqMtdkN47CYR93OTyZdcWkvhnbka+GkV//DuI71jY8GYCjLwtg7xvhELRaQRsYUgrzAbiDTju4AgqEgqUBlQabik+jeQT5v66L6/77rvbNO1ZdqsUCxrxCUHgBu2j/xY5/q/aZOqJby+0uw0GfySvZKMGYpPU5tMePGu9QwN/yVarnWFFibBpu+DhAjEO/i07m0y7nSQu0+b7K9tbuEfN+w8+qXmfhYgVG3vEZdcIzYIXnh8zUNp7fwunekx15I9RdoECWkEqretagKhCGqbTDibVK0OgvdD6WfW73ypvCZ8+VYg8oBcDIBtUh5CUQcfX7PNJmOPq0yeQjrI1Rng7QN8U3+gJmFsbczBO62DbDEj9UPrdh7dClBCDjIM2xUtFESDgAgPPrp6h0uSndpkNZROcRX0vDSIHOureTtKpfTVWvC6ayqB0BgFKEiaPnFO623HoxVJq6KbKSWu3z6y2/T0f8fVxx0AfdV7/B2snAlSibMiLvUm3/ftfrF7V287vAikIAzVTG6f06PbbPXcb3W2T0PEX9Mef8cNAChbG09Ntu/T2UD/Zd32w6sQRb7wwKGgLXwEGY62WNHJ12w68azK9ioB7Mx3UTLLwC9oEtjauDVBfo3Wwe/XPnJ4Y2XP2rQtPCjFYlkfjDacSyT5qkuq/1Q6MM1cPI3inrMUHCBhbDruqIN3myATrw9HNlf2rE2b6e7STBeXXOGBp4KRqHDCif2Cd/Y8dcDp3H4WK96KvNQ+rYpS+lbC/G5dOPIRIPLFskwJYJU9D6Yol/Whx+59UeBCKtMqttqdVTCrwRv0ii6tO6WDBUrU0+u3Ve6JS3Tt4FEquWKxrO9csfpJX6/+SQU5Be9lDgS36XO+t/VUZ/J3qEz2p6vCkRviEl27IicuF31corNOf8MntTM0mbYuPyfAmyuw9XGrsr335Tx/ViyWNUpx2zRXLBb1oV33nPReHqYJvDRLwbkKDpLGTox6k81/7tWl7/ku4pJDm+oujsu+WBZdq2Gvq53/q8nN0yKXNkrmFHhjyyt6W/eA3jHwSOUDiOinlraUOI7x0o9Wjytmdrhk/A0ao8iLXaQ5Bw6A3jkx2Z681sGTG3/4cn8UKT9F+bjkNoX7zfOPrXxRnHtGUatW/2DWp7MZXF7Z+oTT2d5V7tz4DwpPvRhsGhqacpxt9c+ttrtdWn2dbNTxs7qAeXN2KJdWrc72f0X/J9gwPLzFIrwsypMCEVaitWc88YTO5Cni5qyrX6ztrFUgexTw6LLwWKbdibOVuAP631hbO6FMVjyUn8PgABSVTyZEZbKb5wm2IqKfcpwmBYPggahwCtb9QmV6CU07t8Fby3tA0nDg4eMLLjROJ3eqBxufRpu4Pvrfs7S+f+6Dk/TOehX03KVN8nWQUniqcsmEKCJ9sSz6uWjFq4DaB+1zHaG4iAdICvnZgfDYuyqn9k0pbOJW10apX4qoEx0BToI+rVmdya3QNv0koshPGTOX6EDKP6KVQ3nVPzJLem5vheqNfpqtjR3I6Vs/OhzdPAaIAtrP/DojuDVPcM2iZuOEe31zI6rNkBDQQYtsJHFN//kwDNVMI+qOAgegXVqDAPcP4cuLpy1oOhAcgIc2QU/djW5tDEKlS8AFAioIuLUxdWk/XOs8cDZe+QCxtLDjyPpW+7kLXJ0Un3odZPsD8BMAcPLGJaoLwAERepocBBjYFO43S86e9JcHuY4EJ6B8WgXgl1eT+XfHcckVy2XV8eAglHep09m+2xGoAgCcfHZJF4ADoMArkyHAtYCwcss+1xXgAlE+rYEeq1aFR+YjivzkAUTnKg4obxMAfmUPgoUAgEF0PjhIinfO5OffZCGLLz+zdC74xdwGY6UAANGkKq7TwQlv4ZUvNPpw7A5wAvTeg4K7Cw9c2ofrbMVJQBxA3tl3y3mNLtrjbIzG5ebT5xbluwm86fLUvfP8kma0Y9dEdSoFOnsXACAcZNcoDhKEvq3rXL15Ir0JzfKtW8Cl2X69cfKXpo1tGsX8HBsozATefOHtBgAoHo8ZXw6eToxS9S8MqA06BlwEKsjB2uSOaRWv53POpLXDtNTX+r+5Wbi/vYdXhPwLAJYtKwq6eU1ptm8K95tOBF18/LTEccmh29f/AHN1Nt0nsalGAAAAAElFTkSuQmCC' },
+      { name: 'Angel One', offer: 'Trade stocks and F&O', btn: 'bg-emerald-500 hover:bg-emerald-600', link: 'https://angel-one.onelink.me/Wjgr/wwp050bi', logo: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAF5UlEQVR42u2ZW2xUVRSGv3VmaIkJEaIGNCZGRSXQzpO+gDEGHwwkSNsoGhISDUFUoohcKlRQ0EjkEi0XRRQIxkC02JlpxScvPBQfQAycGVqsgIlyiyAtUi6Fmb18mBmZnjnnTFs6QMmst8me2Xuvtdf+1r/2QNGKVrSiFa1oN4aVV+jusqd06LVc07pmzlXqLBEetgIsu5YOyrVYZOR4HRYooVWEQQDGMCYelZ9vmhMMlLAy4xyAWGwAtW4KB8sm6mgRJjvSZkSogldvAgfVSp2Wywi8O6JSb+vXDpZV8ILACNfLLwwqUT7s1w5ahiYg6YO4KWUTdXS/ddBukN/A/5QKDZyCQ+Z0kEUKx33q1IjySmb2WweP1MkFUWb7s4jFI8frsH5bB+2IbAV2ep6iMChQwsp+LdVIMtUPOCJMLgRwgn052fBxesfAUka5ZqHBAKsEZuUBzigQc0Nq0dBEnYBFg0dhP5EM8kDwMn8g3O41h1HmxCOy8oZMUTsqjUCTRySrm+ukw/icYHpDS/oSOH1+BzXBtJy7puyyw/IFQDwiX/oBB+GWYGnfKZw+dzDWKAeAtY5VXu4JcIDn+go4BaFoIkiNKm0Aqmy06+VXF4WzNq/CeVyDN6SDzXXSgTJflbOdSaq9goByyk/hhIb439eCUzQ0Qe81Ae5xjZzFv0kIBJIMNELAY/EyEVb7KJzziUvc3/ydnLgudVCDTLFgscfmftwflidCFXrUEu5yLQmGKoTdAo94ASdQQi3w7HVJ0bYgy92EtCpqkqn0UmWux8+b4lEJY5iqivoonEmhSh17XRz0EtIC6+INYgPEorIFZZdTuKXLCbGoxBA+9tfifNZb4Fw1ZNJCuilrN+2XhIWOVJzmUCufpssJAOfyA+e+8lvzdCSFpKhJMiOTZgoLD4Tln+zxeIPYqqxPp2xbEGqyxw/XyRkj7rTNStVFvVE4feJgvEFshPUKLbGIe7oFoFqVsyos2BuR9pw5wrJRYbefwgmU+hC30HXwwkXmkaDKqxPYG5F2NYyNh2WddyrkAQ483VPg9KgOhiq1CRjjAYK1qmyzhJ+8fn/Z4sEBhlZP/wxVYvGkwHQf4ByOtfEQOyTR5ydohKWuiyqdavggHpEdLsTMfGdzyzfyuyofeWy8JR4lei5INUq7H3DKBnuWnqtzMF4v21X5Pmdzwop4VP7KENOZZmnJNgcgOYCFwEkXUE0DMYfr5IziDxwL3gpV6d0FuYOWMMMR+mOnE7zvAM7nDgIuaW2UUxmdapT5jtPbtr9B/m+hYhFZr2D7AQeltiAO7gtLqzEszzqducca5XwXYirzVDmbHj9kt3VNy3hENijsy0rvN3KyIukPHKCqO8DpFUVNCUuAkyi7YlHZ4kZMIVXsBaa7AcFIqvgLLM2kt6P0/CLi/r9GTxROrxxsrpMODFON8LyPwqlVmG1H5Ae38f31shvldTsii73m6AgyJx9wQkPyCAS/wfIK/QphqEf4togSVItJHuNHRZil8LXPEvNRxiE85jHHHoGDflpVlU6xGG7Xy5Eet0siHIRcB1RRNbymgChrRFwD9Y4dlr9DlRoAHnVJr+NtQfYOTnCnRVftmhX+TXZYNpdX6ksCIY89lqphNVDZ4xQ9HeQ9t3Yo0y3EG8QW2OgSgD8TA1I1UxO5ZYNUYGYfqZML8bDUu77EpR6qNmeAk+cgKryAY/W4HVLa9fIVsXwxyZsZYmbVxVnNdXIp8wil8Ilj6p3pLiT1fGFylYvCK9nAUdiUDzgjn9GSHkPGjsjWLupEqYltl7bMx9ZGOYXwdpdGNnUq2fcg+xFKTfLK5gGao9IMrMra7KZYRPZ0kXkw1xlIJ3ACl3OB0y2KZtSJQosdlZwLHwtTq8qh7EbWWTbI9IjC+kwz7PYSp8rZzgTznOPpFmxBnq3WOBVOtxxM93MrUnLKNX5GhBdRlmU3sl2DIGtRvuVSVxWTXXoUZgpUZ1RPzhwRWaPKHp+7WKrKOIpWtKIVrWhF6579B3EiqYlGwReCAAAAAElFTkSuQmCC' },
+      { name: 'Groww', offer: 'Stocks, IPOs and MF', btn: 'bg-purple-600 hover:bg-purple-700', link: 'https://groww.in', logo: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAE2ElEQVR42rWXW2xUVRSGv7XPmTNnOtOWUiEYKMFaBGNjUh589AIloo1VU+EBDSbGWC4JGCMPRF+JRo0hMTFKgo9orFGsEi9IQ4KIGi6Vi2hDCwVCDdCm7Zw5M3PmnL19mAItTduh0PU4e8/6//OvtddFKNHWbjBV+YhmA6tEaAAWAMmRYx+4BLrTaPWDpWlv2yUDpfiVqS60tJrFBr1NUKtthxQGtAajwZgRJwKiQKmixzDAw/Clsnmn7WM5O00CRlrW6x22rTbHHAjyoKOboBM6FFAWOHEoBBAV2PHVp7wBYkom8Nx6s8gy7E+WU5vLQhQyLbNscBOQSdMdCY17PpHzUxJ4fr2pV4ZOtwwr5xelKCVUE8kIiJuEXIYwNMGyb3fGT05I4NmNpsaO6IknsPPZOwIeRySeQPJZImWobdspF64fqNG37JCORPKugwNIPotJJLG00AFGxhFoaTXvJSupy2ZKex3TIZHNQLKC+194lffHhGD1a2ahcug1BqLwrn/96IAbW5BYAbTPot27pVcBaOGtmHMj22cKHBUizjU40xLQtmvf2wDS/Iopj8XMZcuW1HSfWyngVgBxD463nOPUmm7IaQ8/mm87Ds12TFJhYebA7TzEsvDHui66mv6FIAFueYrAf8Y2hiZjpq5w0wbPglWAX1tPc/7xHsi6EAk4GqVMkw0s03pmwGPFQsaBLZ1cfuQi+C5oKdanIEQjy2ygxpRIwAqKcmobQnf0ax4P7ngQxuHA60e4Wt8HmVv+EIaAqVFAWSnyx9OQT0b0PNHHtVqPeBrs3AR3hyGfMuzbdpir9f9BJjGerTYgUmZPJaNEkBiEvoc8Dm08SnbOEEQOtQcW8vA3S0ldU+RTRVUA3GFIzw3Zv/UwmflD4LmTQ7S0Gk+E5DgVRrLXycDfT17m6MsnQBnwY2BpcANiwwnq9yxhSccC7BxYIVypy9Gx9TD5ah+8+MTISiAyWWlpNWeUxVIdjT13MmAU/LnuDD0ruiGIQd4aW6biEcQKVJ69hwd/qqWQCPmr5R/CyhyknclLmhODfKHLRjim1CgCBhLDkJ4bcXDTEQYeuFJ8OqGMd5i3ILAYum+Q3zcdKf4WWFODAzg2Khces41mrwhrUaAKkBiCiw1DHNpwlGBWFrzE5LOTAbJ2MTyGYrJNBT4yu2n0XjsM+U4UaTekXNJwovkinS+eKjqbLIa3mr6NFuI64PkeYdiu2j+TdMznC6sMDm48RedLnRAoyMSYMVMplFGfU/30sAJIemz//s3T9D7aB75rKFgz1RMNiTjgoyO23xhIdn0tvQM15z6Ee0ErmbEvFwSrCpX2P6BqRe/Y1DJGSP9ylvLqWrz+mRhKDKlqId3fTcXKuvEzoYghCpaT7tekZo10jLsJPkvw+iNClo9JhzHXqpp6CaUBbzAiVS0jGpg7AhYgVS14gxHiNDB75YWJCQDMbjyBbdeR7u8hOQ9cZ/qhcB0hOQ+8gR4ivZjUYydLX82METW8b4euSG6GMtAe5ILiYjhVkXEdUCnARw37H+mKxi3IbaxmY2zo58VKZJuGNZSXJa8PE4RhsaVebyy2DY5ddOn5nhLadFbeZU5j1x1txzeJ/DYbyTYr4SltdHE9V5IYUcvHcEkZOa61/hGl26lcVdJ6/j8N9AMv+q/YKwAAAABJRU5ErkJggg==' },
+      { name: 'Dhan', offer: 'Fast trading platform', btn: 'bg-amber-600 hover:bg-amber-700', link: 'https://join.dhan.co/?invite=YNYHC10246', logo: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAEh0lEQVR42p2WbWxTZRTHf/f2vnRtt5a9uFHIgGQiCRreY9APDgIyxDBNABM0KsgCSFD4hLxNBSWgH6ZoVCBTNIMomCgm4giK+2A0CouCxkCcbCAbK2xjW9ut97ltrx9GL912uxf+yU1629Pzu+d5/ufcR2KEmnFk+wR/ds4Ct6pPxLImASBJjTHTaOoKd3//+9NvXhlJHmm4gLLv3tmdTCa2qYqaMdaMmxaALLv21C7etPOugKXf7HvBq2cdGgrgJMOMS5JMRd3SLdUjBpadrKpxuVwrRwtKv8/StKO1j21+ZljgQ8d3nx2T4591N5BBD2iK+p+X75yT/p08sLIUzIybViaYYcalTDDDNOwriTWr7GRVjWOFs49WLizMyz81ENKX3KA9Iaw8lybpqg5ASyycsfI8l2bnFUIgS/Kicyt3nQZQUj/k+v21TrDXpi6SSkumAUidsSgvf/0BY7PH8Er5BscKb0Ru8fgPB5Lp0KSVPJVaTTnlyIF/7O6JSgcfXimVlkyjruE85dWVALz7xIvs++UEAbfX8ZqcP565Vo4shEAI0c/1doXCEOs0j9LPBLqqMzl/PADzDu/oVwHA2KoK7pF0zm96H4DnPn+byx0hAP7pbkPSVSlYWGQBGEJIwhDrgGoFwOfxzBxoAl1VrPQ9PrRkPQDLa/bi8wSI9MZojXfZ8Z3RMD+1XcWn6HhlF5Zh0hJqtaFdkfBsAHn20cqFTo5rDN+iMxYFYMvcciq+/ZAxb61i8b3TicQNvLJr0P6lYClZhknz1f/6GVPx+bzFVvKOpdOd9tSZA8kv5q+V9y5Zw+oHy+wlLskNUnH68EjHMG2tIfKLCvH5vMWyW9UnpvrGyTgzP9sOYMPqGs7T0NGCT9EZjdpaQ1y+/G+BEjONJqeAlMO2PfBo3x7Fojzy0RYudN+wly4iehmt5KFghhBSScE4AP641sCFtisUah4AQpF220gjVcKSGuQrza1/poPSeweg9tLZvj4qmcbSSTMIiR6mBwr58fk3WDP3sVEBNbfnqgQw88iOpFNA2IUV7wrLH89fxe1pk1Hl1ZWcCTU6ujel0NZPJQXAren1MWHMSi2j/UQgaZrO6jOfsOLS/ZTdN4dgII+WznYabjZTcfowVuWxke2dqtTZk+Z6W8cGj1v9NVOwR9M51vwXNY31NHe0j9oo0WSCKcEJe66nTNO4vuo3vy/7nFNwjzDoEX0to2k6k4qCFGX7bfOMRF7ZdXHQ26JXxJYBTSmIR9NtUPpngCyvl16iFOJB2rWCZyfPoSnckXH/gsXjy0JOb/xxVWuXBQL+4+nJB7eMgabpiNsx8Ugv0WQiI0xxu5c3bz7wZeq+X1T4VP3fWfOmGrKqLsgEA0gkEnfMoKkoZsIRpmfpW69tPnhw2EPUuKq1yzSP+/jAahyb2Yzbg3qoyoY9Jubu35iji54Tsq6WDgUalDBp1Rmap7zjpfe67+ogPOPI9gktN2++CsknFZcScAJZMp0gfxUsKHh9uBO4NJp+yt2/McevKlNErKc4Naq6zPjFTNU46X8pCg+rAp29VQAAAABJRU5ErkJggg==' }
+    ];
+    // Shown in the broker comparison view. Add real offers here only after checking them with the broker.
+    const BROKER_FEATURES = ['Demat and trading account', 'Apply for IPOs with UPI', 'Check current charges on the broker site'];
+
+    // Registrar sites where people check IPO allotment (verify the links before going live)
+    const REGISTRARS = [
+      ['KFin Technologies', 'https://ipostatus.kfintech.com/'],
+      ['Link Intime India', 'https://linkintime.co.in/MIPO/Ipoallotment.html'],
+      ['Bigshare Services', 'https://ipo.bigshareonline.com/IPO_Status.html'],
+      ['BSE (all IPOs)', 'https://www.bseindia.com/investors/appli_check.aspx']
+    ];
+
+    // =====================================================
+    // 2. STATE + SMALL HELPERS
+    // =====================================================
+    const state = {
+      view: 'ipo',           // ipo | dividends | earnings | calendar | calc | brokers | allot | watch
+      filter: 'ALL', tab: 'open', query: '', investor: 'Retail', selected: null, ipos: SAMPLE_IPOS,
+      calMonth: 0,           // 0 = this month, 1 = next month, -1 = last month
+      calDay: null,          // day of the month the visitor tapped
+      calCategory: 'all',    // all | economic | earnings | dividend | ipo | holiday
+      eventsAt: null,        // when /api/events was last checked
+      lang: 'en',            // en | hi
+      earnView: 'cards',     // cards | month (earnings view)
+      loaded: false,         // true once the first /api/ipos answer (or failure) arrived
+      calc: { id: '', price: '', lot: '', gmp: '', lots: 1 },
+      watch: [],             // ids of IPOs saved by the visitor
+      events: []             // market holidays + important events from /api/events
+    };
+    const openedFromFile = window.location.protocol === 'file:';
+    const serverRequiredMessage = 'Run npm start · open http://localhost:3000';
+    try { state.watch = JSON.parse(localStorage.getItem('bb_watch') || '[]'); } catch (e) { /* storage blocked */ }
+    const TBA = 'To be announced';
+    const ACTIVE = ['bg-emerald-600', 'text-white', 'shadow-sm'];   // selected filter button
+    const IDLE = ['bg-pill', 'text-ink'];
+
+    const $ = (selector) => document.querySelector(selector);
+    const rupee = (n) => '₹' + Number(n).toLocaleString('en-IN');
+    const signed = (n) => (n > 0 ? '+' : '') + n;
+    const gmpPercent = (i) => (i.hi ? ((i.gmp / i.hi) * 100).toFixed(1) : '0.0');
+    const gmpColor = (i) => (i.gmp >= 0 ? 'text-up' : 'text-down');
+    const esc = (text) => String(text ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    // Company logo: shows the logo from i.logo (a link or base64) and falls back to the company's initials
+    const logoHTML = (i, size = 'h-11 w-11') => {
+      const initials = String(i.n || '?').trim().split(/\s+/).slice(0, 2).map((word) => word[0]).join('').toUpperCase();
+      return `<span class="relative grid ${size} shrink-0 place-items-center overflow-hidden rounded-xl bg-soft text-sm font-extrabold text-brand">
+        <span>${esc(initials || '?')}</span>
+        ${i.logo ? `<img src="${esc(i.logo)}" alt="" loading="lazy" class="absolute inset-0 h-full w-full bg-white object-contain p-1" onerror="this.remove()">` : ''}
+      </span>`;
+    };
+
+    // =====================================================
+    // 3. IPO CARDS (list page)
+    // =====================================================
+    function cardHTML(i) {
+      return `
+        <article data-id="${esc(i.id)}" tabindex="0" role="button"
+                 class="cursor-pointer rounded-xl border border-line bg-card p-4 transition hover:bg-soft">
+          <div class="flex items-center gap-3">
+            ${logoHTML(i)}
+            <div class="min-w-0">
+              <h3 class="truncate font-bold">${esc(i.n)}</h3>
+              <span class="rounded bg-violet-500/20 px-2 py-0.5 text-[11px] font-bold text-violet-500">${ipoCategory(i)}</span>
+              ${ipoSector(i) ? `<span class="text-xs text-mute">${esc(ipoSector(i))}</span>` : ''}
+            </div>
+            <button data-star="${esc(i.id)}" aria-label="Save to watchlist" class="ml-auto text-xl text-amber-500">${state.watch.includes(i.id) ? '★' : '☆'}</button>
+            <div class="text-right ${gmpColor(i)}">
+              <div class="font-bold">${signed(i.gmp)}</div>
+              <div class="text-xs">${gmpPercent(i)}%</div>
+            </div>
+          </div>
+          <div class="mt-4 flex justify-between gap-3 text-sm">
+            <div><div class="text-xs text-mute">Offer starts on</div><b>${esc(i.open || TBA)}</b></div>
+            <div class="text-right"><div class="text-xs text-mute">Bid price range</div><b>${i.hi ? `₹${i.lo} – ₹${i.hi}` : TBA}</b></div>
+          </div>
+          <div class="mt-3 flex justify-between border-t border-line pt-3 text-xs text-mute">
+            <span>Issue size: ${i.size ? '₹' + i.size + ' cr' : '–'}</span>
+            <span>Subscribed: ${i.sub ? i.sub[3] + 'x' : '–'}</span>
+          </div>
+        </article>`;
+    }
+
+    // ---------- IPO table ----------
+    const ipoCategory = (i) => (/\bsme\b/i.test(`${i.cat || ''} ${i.sec || ''}`) ? 'SME' : 'MAINBOARD');
+    const ipoSector = (i) => {
+      const sector = String(i.sector || i.sec || '').trim();
+      return /^(mainboard|sme)$/i.test(sector) ? '' : sector;          // NSE sends the board name here, not a sector
+    };
+    const ipoStatus = (i) => String(i.s || '').trim().toLowerCase();  // tolerates "Open", " OPEN " ...
+
+    function visibleIpos() {
+      const query = state.query.toLowerCase(), f = state.filter;
+      return state.ipos
+        .filter((i) => {
+          const matches = f === 'ALL' || (['OPEN', 'UPCOMING', 'CLOSED'].includes(f) ? ipoStatus(i) === f.toLowerCase() : ipoCategory(i) === f);
+          return matches && i.n.toLowerCase().includes(query);
+        })
+        .sort((a, b) => {
+          const statusOrder = { open: 0, upcoming: 1, closed: 2 };
+          const statusDifference = (statusOrder[ipoStatus(a)] ?? 3) - (statusOrder[ipoStatus(b)] ?? 3);
+          if (statusDifference) return statusDifference;
+          if (ipoStatus(a) === 'closed') {
+            const categoryOrder = { MAINBOARD: 0, SME: 1 };
+            const categoryDifference = categoryOrder[ipoCategory(a)] - categoryOrder[ipoCategory(b)];
+            if (categoryDifference) return categoryDifference;
+          }
+          return b.gmp / (b.hi || 1) - a.gmp / (a.hi || 1); // highest GMP % first within each group
+        });
+    }
+
+    function ipoRowHTML(i) {
+      const hasPrice = i.hi > 0;
+      const lotKnown = i.lot > 1;                        // NSE does not send the lot size, so 1 means "not filled in yet"
+      const up = i.gmp >= 0;
+      const category = ipoCategory(i);
+      const [status, statusColor] = {
+        open: ['OPEN', 'bg-emerald-500/20 text-emerald-600'],
+        upcoming: ['UPCOMING', 'bg-amber-500/20 text-amber-600'],
+        closed: ['CLOSED', 'bg-slate-500/20 text-slate-500']
+      }[ipoStatus(i)] || ['-', 'bg-slate-500/20 text-slate-500'];
+      const money = (n) => `${n >= 0 ? '+' : '-'}${rupee(Math.abs(n))}`;
+      const apply = ipoStatus(i) === 'closed' ? '' : `<a href="${esc(BROKERS[1].link)}" target="_blank" rel="sponsored noopener" class="inline-block rounded bg-emerald-500 px-3 py-1 text-xs font-bold text-white no-underline shadow-sm hover:bg-emerald-600">Apply</a>`;
+      return `
+        <tr data-id="${esc(i.id)}" tabindex="0" class="cursor-pointer border-t border-line transition hover:bg-soft">
+          <td class="px-4 py-3">
+            <div class="flex items-center gap-3">
+              ${logoHTML(i, 'h-9 w-9 rounded-lg')}
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <b>${esc(i.n)}</b>
+                  <span class="rounded border px-1.5 py-0.5 text-[10px] font-extrabold uppercase ${category === 'SME' ? 'border-purple-500/20 bg-purple-500/10 text-purple-500' : 'border-blue-500/20 bg-blue-500/10 text-blue-500'}">${category}</span>
+                  ${ipoSector(i) ? `<span class="text-xs text-mute">${esc(ipoSector(i))}</span>` : ''}
+                </div>
+                <div class="mt-0.5 text-xs text-mute">${lotKnown ? `Lot: <b>${i.lot}</b> | ` : ''}${i.close ? 'Closes: ' + esc(i.close) : TBA}</div>
+              </div>
+            </div>
+          </td>
+          <td class="px-3 py-4 text-right font-medium">${hasPrice ? `₹${i.lo}–${i.hi}` : TBA}</td>
+          <td class="px-3 py-4 text-right"><span class="inline-flex rounded px-2 py-0.5 text-xs font-bold ${up ? 'bg-emerald-500/10 text-emerald-600' : 'bg-rose-500/10 text-rose-500'}">${money(i.gmp)}</span></td>
+          <td class="px-3 py-4 text-right font-bold">${hasPrice ? rupee(i.hi + i.gmp) : '–'}</td>
+          <td class="px-3 py-4 text-right font-bold ${gmpColor(i)}">${hasPrice ? (up ? '+' : '') + gmpPercent(i) + '%' : '–'}</td>
+          <td class="px-3 py-4 text-right font-bold ${gmpColor(i)}">${hasPrice && lotKnown ? money(i.gmp * i.lot) : '–'}</td>
+          <td class="px-3 py-4 text-center"><span class="rounded-full px-2 py-0.5 text-[10px] font-black tracking-wider ${statusColor}">${status}</span></td>
+          <td class="whitespace-nowrap px-4 py-4 text-center">
+            <button data-star="${esc(i.id)}" aria-label="Save to watchlist" class="mr-1 text-lg text-amber-500">${state.watch.includes(i.id) ? '★' : '☆'}</button>
+            ${apply}
+          </td>
+        </tr>`;
+    }
+
+    function renderIpoTable() {
+      document.querySelectorAll('[data-filter]').forEach((btn) => {
+        const on = btn.dataset.filter === state.filter;
+        btn.classList.remove(...(on ? IDLE : ACTIVE));
+        btn.classList.add(...(on ? ACTIVE : IDLE));
+      });
+      const rows = visibleIpos();
+      $('#ipo-table-body').innerHTML = rows.length
+        ? rows.map(ipoRowHTML).join('')
+        : '<tr><td colspan="8" class="py-8 text-center text-mute">No matching IPOs found.</td></tr>';
+    }
+
+    function render() {
+      renderNav();
+      const onList = state.view === 'ipo';
+      $('#view-ipos').classList.toggle('hidden', !onList);
+      $('#view-other').classList.toggle('hidden', onList);
+      if (onList) renderIpoTable(); else renderOther();
+      if (state.selected) renderDetail();
+    }
+
+    // =====================================================
+    // 4. DETAIL MODAL
+    // =====================================================
+    const section = (title, html) => `
+      <section class="mt-5">
+        <h3 class="mb-2 text-base font-bold">${title}</h3>${html}
+      </section>`;
+
+    const bulletList = (items) => items?.length
+      ? `<ul class="list-disc space-y-1 pl-5">${items.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`
+      : '<p class="text-mute">Details will be added soon.</p>';
+
+    function companyPointsBlock(i, type) {
+      const live = i.companyPointsSource === 'Chittorgarh';
+      const items = Array.isArray(i[type]) ? i[type].filter(value => typeof value === 'string' && value.trim()) : [];
+      if (!items.length) {
+        if (!live) return bulletList(items);
+        return `<p class="text-sm text-mute">
+          Not listed in the available IPO summary. Review the company prospectus for full disclosures.
+        </p>`;
+      }
+      const emoji = type === 'st' ? '✅' : '⚠️';
+      return `<ul class="space-y-2 text-sm leading-6">
+        ${items.map(item => `<li class="flex items-start gap-2">
+          <span aria-hidden="true">${emoji}</span><span>${esc(item)}</span>
+        </li>`).join('')}
+      </ul>`;
+    }
+
+    function companyOverviewBlock(i) {
+      const paragraphs = String(i.ab || '').split(/\n\s*\n/).map(text => text.trim()).filter(Boolean);
+      return `<div class="relative overflow-hidden rounded-2xl border border-line bg-card p-4 shadow-sm sm:p-5">
+        <div class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-emerald-500 via-sky-500 to-violet-500"></div>
+        <div class="mb-3 flex items-center gap-2 pl-2">
+          <span class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-mute">
+            <i class="fa-solid fa-building text-emerald-500"></i>Company profile
+          </span>
+        </div>
+        <div class="space-y-3 pl-2 text-sm leading-7 text-ink">
+          ${paragraphs.length
+            ? paragraphs.map(text => `<p>${esc(text)}</p>`).join('')
+            : '<p class="text-mute">Details will be added soon.</p>'}
+        </div>
+      </div>`;
+    }
+
+    function objectivesBlock(i) {
+      const objectives = Array.isArray(i.obj) ? i.obj.filter(value => typeof value === 'string' && value.trim()) : [];
+      if (!objectives.length) return '<p class="text-sm text-mute">Details will be added soon.</p>';
+      return `<div class="space-y-3">
+        <p class="text-xs text-mute">How the IPO proceeds are proposed to be used</p>
+        <ul class="space-y-2 text-sm leading-6">
+          ${objectives.map(objective => `<li class="flex items-start gap-2">
+            <span aria-hidden="true">🎯</span><span>${esc(objective)}</span>
+          </li>`).join('')}
+        </ul>
+      </div>`;
+    }
+
+    const table = (head, rows) => `
+      <div class="overflow-x-auto rounded-lg border border-line">
+        <table class="w-full text-left text-sm">
+          <thead class="text-xs text-mute"><tr>${head.map((h) => `<th class="px-3 py-2">${h}</th>`).join('')}</tr></thead>
+          <tbody>${rows.map((r) => `<tr class="border-t border-line">${r.map((c) => `<td class="px-3 py-2">${c}</td>`).join('')}</tr>`).join('')}</tbody>
+        </table>
+      </div>`;
+
+    // Min / max investment for the selected investor type
+    function investorLimits(i) {
+      const oneLot = i.lot * i.hi;
+      if (!oneLot) return { min: TBA, max: TBA, discount: '₹0' };
+      const retailLots = Math.max(1, Math.floor(200000 / oneLot)); // retail limit: Rs 2 lakh
+      const rules = {
+        Retail: [1, retailLots, 0],
+        HNI: [retailLots + 1, null, 0],
+        Employee: [1, Math.max(1, Math.floor(500000 / oneLot)), 10],
+        Shareholder: [1, retailLots, 0]
+      }[state.investor];
+      const [minLots, maxLots, discount] = rules;
+      return {
+        min: `${rupee(oneLot * minLots)} / ${minLots} lot${minLots > 1 ? 's' : ''}`,
+        max: maxLots ? `${rupee(oneLot * maxLots)} / ${maxLots} lots` : 'No upper limit',
+        discount: rupee(discount)
+      };
+    }
+
+    function datesTimeline(i) {
+      const steps = [['Offer starts', i.open], ['Offer ends', i.close], ['Allotment', i.allot], ['Listing', i.list]];
+      const current = { upcoming: 0, open: 1, closed: 2 }[ipoStatus(i)];
+      return `<div class="flex rounded-xl border border-line p-4">${steps.map(([label, date], n) => {
+        const dot = n < current ? 'bg-up text-white' : n === current ? 'bg-brand text-white ring-4 ring-brand/30' : 'bg-line';
+        return `<div class="flex-1 text-center text-xs text-mute">
+          <div class="mx-auto mb-2 grid h-6 w-6 place-items-center rounded-full ${dot}">${n < current ? '✓' : ''}</div>
+          ${label}<b class="block text-[13px] text-ink">${esc(date || TBA)}</b></div>`;
+      }).join('')}</div>`;
+    }
+
+    function subscriptionBlock(i) {
+      if (!Array.isArray(i.sub) || !i.sub.some(Number.isFinite)) {
+        return `<p class="text-sm text-mute">${ipoStatus(i) === 'open'
+          ? 'Live subscription data is currently unavailable.'
+          : 'Subscription data appears after bidding starts.'}</p>`;
+      }
+      const names = ['QIB', 'NII', 'Retail'];
+      const format = (value) => Number.isFinite(value)
+        ? `${Number(value).toLocaleString('en-IN', { maximumFractionDigits: 2 })}x`
+        : '–';
+      const rows = names.map((name, n) => [name, format(i.sub[n])]);
+      rows.push(['<b>Total</b>', `<b class="text-up">${format(i.sub[3])}</b>`]);
+      return table(['Category', 'Times subscribed'], rows);
+    }
+
+    function sparkline(history, historyDates = [], currentGmp = null) {
+      const entries = (Array.isArray(history) ? history : [])
+        .map((value, index) => ({ value, date: historyDates[index] }))
+        .filter(point => typeof point.value === 'number' && Number.isFinite(point.value));
+      if (Number.isFinite(currentGmp) && (!entries.length || entries[entries.length - 1].value !== currentGmp)) {
+        entries.push({ value: currentGmp, date: new Date().toISOString() });
+      }
+      if (!entries.length) return '<p class="text-sm text-mute">GMP trend data is not available yet.</p>';
+
+      const values = entries.map(point => point.value);
+      const first = values[0], latest = values[values.length - 1];
+      const high = Math.max(...values), low = Math.min(...values);
+      const change = latest - first;
+      const lineColor = change >= 0 ? '#10b981' : '#f43f5e';
+      const signedMoney = value => `${value < 0 ? '−' : value > 0 ? '+' : ''}₹${Math.abs(value).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+      const amount = value => `₹${Number(value).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+      const fullDate = value => {
+        const date = new Date(value);
+        return Number.isFinite(date.getTime())
+          ? date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+          : '';
+      };
+      const dates = entries.map((point, index) => {
+        const date = fullDate(point.date);
+        if (date) return date;
+        const fallback = new Date();
+        fallback.setDate(fallback.getDate() - (values.length - index - 1));
+        return fallback.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+      });
+
+      const width = 1000, height = 320, left = 78, right = 24, top = 28, bottom = 48;
+      const plotWidth = width - left - right, plotHeight = height - top - bottom;
+      const rawMin = Math.min(0, low), rawMax = Math.max(0, high);
+      const rawRange = rawMax - rawMin || Math.max(Math.abs(rawMax), 1);
+      const min = rawMin - rawRange * 0.08, max = rawMax + rawRange * 0.16;
+      const x = index => entries.length === 1
+        ? left + plotWidth / 2
+        : left + index * plotWidth / (entries.length - 1);
+      const y = value => top + (max - value) * plotHeight / (max - min);
+      const points = values.map((value, index) => ({ x: x(index), y: y(value), value }));
+      const baseline = y(0);
+
+      let linePath = `M ${points[0].x} ${points[0].y}`;
+      for (let index = 0; index < points.length - 1; index++) {
+        const previous = points[Math.max(0, index - 1)];
+        const current = points[index], next = points[index + 1];
+        const following = points[Math.min(points.length - 1, index + 2)];
+        linePath += ` C ${current.x + (next.x - previous.x) / 6} ${current.y + (next.y - previous.y) / 6}`
+          + ` ${next.x - (following.x - current.x) / 6} ${next.y - (following.y - current.y) / 6}`
+          + ` ${next.x} ${next.y}`;
+      }
+      const areaPath = `${linePath} L ${points[points.length - 1].x} ${baseline} L ${points[0].x} ${baseline} Z`;
+      const ticks = Array.from({ length: 5 }, (_, index) => min + (max - min) * index / 4);
+      const grid = ticks.map(value => {
+        const tickY = y(value);
+        return `<g>
+          <line x1="${left}" y1="${tickY}" x2="${width - right}" y2="${tickY}" stroke="var(--line)" stroke-width="${Math.abs(value) < 0.0001 ? 1.5 : 1}" ${Math.abs(value) < 0.0001 ? 'stroke-dasharray="5 5"' : ''}/>
+          <text x="${left - 12}" y="${tickY + 4}" text-anchor="end" fill="var(--mute)" font-size="12">${signedMoney(value)}</text>
+        </g>`;
+      }).join('');
+      const labelCount = Math.min(5, entries.length);
+      const dateLabels = Array.from({ length: labelCount }, (_, index) => {
+        const pointIndex = labelCount === 1 ? 0 : Math.round(index * (entries.length - 1) / (labelCount - 1));
+        const anchor = pointIndex === 0 ? 'start' : pointIndex === entries.length - 1 ? 'end' : 'middle';
+        return `<text x="${x(pointIndex)}" y="${height - 14}" text-anchor="${anchor}" fill="var(--mute)" font-size="12">${dates[pointIndex]}</text>`;
+      }).join('');
+      const markers = points.map((point, index) => {
+        const tooltipWidth = 142, tooltipHeight = 58;
+        const tooltipX = Math.max(left, Math.min(width - right - tooltipWidth, point.x - tooltipWidth / 2));
+        const tooltipY = Math.max(top, point.y - tooltipHeight - 14);
+        return `<g class="gmp-trend-point" tabindex="0" role="img" aria-label="${dates[index]} GMP ${amount(point.value)}">
+          <title>${dates[index]} · GMP ${amount(point.value)}</title>
+          <line x1="${point.x}" y1="${top}" x2="${point.x}" y2="${height - bottom}" stroke="${lineColor}" stroke-opacity=".14" stroke-dasharray="3 5"/>
+          <circle class="gmp-trend-hit" cx="${point.x}" cy="${point.y}" r="13" fill="transparent"/>
+          <circle cx="${point.x}" cy="${point.y}" r="5" fill="${lineColor}" stroke="var(--card)" stroke-width="3"/>
+          <g class="gmp-trend-tooltip" transform="translate(${tooltipX}, ${tooltipY})">
+            <rect width="${tooltipWidth}" height="${tooltipHeight}" rx="10" fill="var(--card)" stroke="var(--line)"/>
+            <text x="12" y="21" fill="var(--mute)" font-size="12">${dates[index]}</text>
+            <circle cx="18" cy="41" r="4" fill="${lineColor}"/>
+            <text x="30" y="46" fill="var(--ink)" font-size="15" font-weight="700">${amount(point.value)}</text>
+          </g>
+        </g>`;
+      }).join('');
+      const latestDate = dates[dates.length - 1];
+
+      return `<div class="space-y-3">
+        <div class="flex flex-wrap items-end justify-between gap-3 rounded-2xl border border-line bg-card p-4">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wide text-mute">Current GMP</p>
+            <p class="mt-1 text-2xl font-extrabold tracking-tight" style="color:${lineColor}">${signedMoney(latest)}</p>
+            <p class="mt-1 text-[11px] text-mute">Last point · ${latestDate}</p>
+          </div>
+          <div class="flex gap-5 text-right">
+            <div><p class="text-[11px] text-mute">High</p><b class="text-sm text-up">${amount(high)}</b></div>
+            <div><p class="text-[11px] text-mute">Low</p><b class="text-sm text-down">${amount(low)}</b></div>
+            <div><p class="text-[11px] text-mute">Change</p><b class="text-sm ${change >= 0 ? 'text-up' : 'text-down'}">${signedMoney(change)}</b></div>
+          </div>
+        </div>
+        <div class="overflow-x-auto rounded-2xl border border-line bg-card p-3 sm:p-4">
+          <svg viewBox="0 0 ${width} ${height}" class="block h-auto w-full min-w-[560px]" role="group" aria-label="GMP trend chart">
+            <defs>
+              <linearGradient id="gmp-trend-fill" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="${lineColor}" stop-opacity=".24"/>
+                <stop offset="100%" stop-color="${lineColor}" stop-opacity=".015"/>
+              </linearGradient>
+            </defs>
+            ${grid}
+            <path d="${areaPath}" fill="url(#gmp-trend-fill)"/>
+            <path d="${linePath}" fill="none" stroke="${lineColor}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            ${markers}
+            ${dateLabels}
+          </svg>
+        </div>
+        <p class="text-[10px] text-mute">Unofficial GMP · hover or focus on a point for details; dates are indicative when source dates are unavailable.</p>
+      </div>`;
+    }
+
+    function financialChart(rows) {
+      const isValue = value => value !== null && value !== '' && Number.isFinite(Number(value));
+      const data = rows.filter(([, revenue, profit]) =>
+        isValue(revenue) || isValue(profit));
+      if (!data.length) return '<p class="text-sm text-mute">Chittorgarh financial data unavailable.</p>';
+      const maxRevenue = Math.max(0, ...data.map(([, revenue]) => Number(revenue) || 0));
+      const maxProfit = Math.max(0, ...data.map(([, , profit]) => Number(profit) || 0));
+      const maxLoss = Math.abs(Math.min(0, ...data.map(([, , profit]) => Number(profit) || 0)));
+      const amount = value => isValue(value)
+        ? `₹${Number(value).toLocaleString('en-IN', { maximumFractionDigits: 2 })} cr`
+        : '–';
+      const compactAmount = value => {
+        const absolute = Math.abs(Number(value));
+        const compact = absolute >= 10000
+          ? `${(absolute / 1000).toLocaleString('en-IN', { maximumFractionDigits: 1 })}K`
+          : absolute.toLocaleString('en-IN', { maximumFractionDigits: 1 });
+        return `${Number(value) < 0 ? '−' : ''}₹${compact}`;
+      };
+      const width = Math.max(420, data.length * 128 + 56);
+      const height = 292, baseline = 208, maxBarHeight = 126, maxLossHeight = 34;
+      const grid = [82, 145, baseline, baseline + maxLossHeight].map(y =>
+        `<line x1="38" y1="${y}" x2="${width - 16}" y2="${y}" stroke="var(--line)" stroke-width="${y === baseline ? 1.5 : 1}"/>`
+      ).join('');
+      const bars = data.map(([period, revenue, profit], index) => {
+        const center = 72 + index * 128;
+        const xRevenue = center - 31, xProfit = center + 6, barWidth = 25;
+        const revenueValue = Number(revenue), profitValue = Number(profit);
+        const revenueHeight = isValue(revenue) && maxRevenue > 0 ? revenueValue / maxRevenue * maxBarHeight : 0;
+        const profitHeight = !isValue(profit) ? 0
+          : profitValue >= 0
+            ? maxProfit > 0 ? profitValue / maxProfit * maxBarHeight : 0
+            : maxLoss > 0 ? Math.abs(profitValue) / maxLoss * maxLossHeight : 0;
+        const revenueY = baseline - revenueHeight;
+        const profitY = profitValue < 0 ? baseline : baseline - profitHeight;
+        const revenueLabelY = Math.max(68, revenueY - 7);
+        const profitLabelY = profitValue < 0 ? baseline + profitHeight + 13 : Math.max(68, profitY - 7);
+        const periodLabel = /^\d{4}$/.test(String(period)) ? `FY${esc(period)}` : esc(period);
+        return `<g>
+          <title>${periodLabel} · Revenue ${amount(revenue)} · Profit (PAT) ${amount(profit)}</title>
+          ${isValue(revenue) ? `<rect x="${xRevenue}" y="${revenueHeight ? revenueY : baseline - 1}" width="${barWidth}" height="${Math.max(1, revenueHeight)}" rx="4" fill="#2563eb"/>` : ''}
+          ${isValue(profit) ? `<rect x="${xProfit}" y="${profitHeight ? profitY : baseline - 1}" width="${barWidth}" height="${Math.max(1, profitHeight)}" rx="4" fill="${profitValue < 0 ? '#ef4444' : '#06b6d4'}"/>` : ''}
+          <text x="${xRevenue + barWidth / 2}" y="${revenueLabelY}" text-anchor="middle" fill="var(--ink)" font-size="10" font-weight="700">${isValue(revenue) ? compactAmount(revenueValue) : '–'}</text>
+          <text x="${xProfit + barWidth / 2}" y="${profitLabelY}" text-anchor="middle" fill="${profitValue < 0 ? '#f43f5e' : 'var(--ink)'}" font-size="10" font-weight="700">${isValue(profit) ? compactAmount(profitValue) : '–'}</text>
+          <text x="${center}" y="276" text-anchor="middle" fill="var(--mute)" font-size="11">${periodLabel}</text>
+        </g>`;
+      }).join('');
+      return `<div class="space-y-3">
+        <div class="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-mute">
+          <span><i class="mr-1 inline-block h-2.5 w-2.5 rounded-sm bg-blue-600"></i>Revenue</span>
+          <span><i class="mr-1 inline-block h-2.5 w-2.5 rounded-sm bg-cyan-500"></i>Profit (PAT; loss shown in red)</span>
+        </div>
+        <p class="text-[11px] text-mute">Each metric is scaled separately so revenue and profit trends remain visible.</p>
+        <div class="overflow-x-auto rounded-2xl border border-line bg-card p-3">
+          <svg viewBox="0 0 ${width} ${height}" class="block h-auto w-full min-w-[420px]" role="img" aria-label="Period-wise revenue and profit bar chart">
+            ${grid}${bars}
+          </svg>
+        </div>
+      </div>`;
+    }
+
+    function shareholdingChart(rows) {
+      const isValue = value => value !== null && value !== '' && Number.isFinite(Number(value));
+      const data = rows.filter(([, pre, post]) =>
+        isValue(pre) || isValue(post));
+      if (!data.length) return '<p class="text-sm text-mute">Chittorgarh shareholding data unavailable.</p>';
+      const percentage = value => isValue(value)
+        ? `${Number(value).toLocaleString('en-IN', { maximumFractionDigits: 2 })}%`
+        : '–';
+      const bar = (label, value, color) => {
+        const number = Number(value);
+        const width = isValue(value) ? Math.max(0, Math.min(100, number)) : 0;
+        return `<div class="grid grid-cols-[5.5rem_minmax(0,1fr)_auto] items-center gap-2 text-xs">
+          <span class="text-mute">${label}</span>
+          <div class="h-3 overflow-hidden rounded-full bg-line/70" role="img" aria-label="${label}: ${percentage(number)}">
+            <div class="h-full rounded-full ${color}" style="width:${width}%"></div>
+          </div>
+          <b class="whitespace-nowrap">${percentage(number)}</b>
+        </div>`;
+      };
+      return `<div class="space-y-3">
+        <div class="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-mute">
+          <span><i class="mr-1 inline-block h-2.5 w-2.5 rounded-sm bg-amber-500"></i>Pre-IPO</span>
+          <span><i class="mr-1 inline-block h-2.5 w-2.5 rounded-sm bg-sky-500"></i>Post-IPO</span>
+        </div>
+        ${data.map(([holder, pre, post]) => `<div class="rounded-xl border border-line bg-card p-3">
+          <h4 class="mb-2 text-sm font-bold">${esc(holder)}</h4>
+          <div class="space-y-2">
+            ${bar('Pre-IPO', pre, 'bg-amber-500')}
+            ${bar('Post-IPO', post, 'bg-sky-500')}
+          </div>
+        </div>`).join('')}
+      </div>`;
+    }
+
+    function detailHTML(i) {
+      const limits = investorLimits(i);
+      const stat = (label, value, color = '') => `<div><div class="text-xs text-mute">${label}</div><b class="${color}">${value}</b></div>`;
+      const pills = ['Retail', 'HNI', 'Employee', 'Shareholder'].map((t) => `
+        <button data-investor="${t}" class="rounded-lg border px-4 py-2 text-sm ${t === state.investor ? 'border-brand bg-soft font-bold text-brand' : 'border-line'}">${t}</button>`).join('');
+      return `
+        <a href="/" data-page="" class="text-sm font-bold text-brand">← All IPOs</a>
+        <div class="relative isolate mt-3 flex flex-wrap items-start justify-between gap-3 overflow-hidden">
+          ${i.logo ? `<img src="${esc(i.logo)}" alt="" aria-hidden="true" class="pointer-events-none absolute right-8 top-1/2 z-0 h-36 w-36 -translate-y-1/2 object-contain opacity-[0.07]" onerror="this.remove()">` : ''}
+          <div class="relative z-10 flex min-w-0 items-center gap-3">
+            ${logoHTML(i, 'h-14 w-14')}
+            <div class="min-w-0">
+              <h1 class="text-2xl font-extrabold tracking-tight">${esc(i.n)}</h1>
+              <span class="rounded bg-violet-500/20 px-2 py-0.5 text-[11px] font-bold text-violet-500">${ipoCategory(i)}</span>
+              ${ipoSector(i) ? `<span class="ml-2 text-xs text-mute">${esc(ipoSector(i))}</span>` : ''}
+            </div>
+          </div>
+          <div class="relative z-10 flex shrink-0 gap-2 text-sm font-bold">
+            <button data-share="whatsapp" class="rounded-lg bg-green-600 px-3 py-1.5 text-white">WhatsApp</button>
+            <button data-share="telegram" class="rounded-lg bg-sky-600 px-3 py-1.5 text-white">Telegram</button>
+            <button data-share="copy" class="rounded-lg border border-line px-3 py-1.5">Copy link</button>
+          </div>
+        </div>
+
+        <div class="mt-4 text-xs text-mute">Investor type</div>
+        <div class="mt-1 flex flex-wrap gap-2">${pills}</div>
+
+        <div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3">
+          ${stat('Bid price range', i.hi ? `₹${i.lo}.00 – ₹${i.hi}.00` : TBA)}
+          ${stat('Lot size', i.lot + ' shares')}
+          ${stat('Discount', limits.discount)}
+          ${stat('Issue size', i.size ? '₹' + i.size.toLocaleString('en-IN') + ' cr' : '–')}
+          ${stat('Offer type', ipoCategory(i) === 'SME' ? 'SME' : 'Mainboard')}
+          ${stat('IPO type', 'Book building')}
+          ${stat('Minimum investment', limits.min)}
+          ${stat('Maximum investment', limits.max)}
+          ${stat('GMP', `${signed(i.gmp)} (${gmpPercent(i)}%)`, gmpColor(i))}
+        </div>
+
+        ${section('Important dates', datesTimeline(i))}
+        ${section('Subscription details', subscriptionBlock(i))}
+        ${section('GMP trend', sparkline(i.h || [], i.gmpDates || [], i.gmp))}
+        ${section('About the company', companyOverviewBlock(i))}
+        ${section('Objective of the issue', objectivesBlock(i))}
+        ${section('Financials (₹ cr)', financialChart(i.fin || []))}
+        ${section('Shareholding pattern', shareholdingChart(i.sh || []))}
+        <div class="grid gap-4 sm:grid-cols-2">
+          ${section('Strengths', companyPointsBlock(i, 'st'))}
+          ${section('Risks', companyPointsBlock(i, 'rk'))}
+        </div>
+        ${section('Company report', `<a class="font-bold text-brand underline" target="_blank" rel="noopener" href="https://www.sebi.gov.in/filings/public-issues.html">Read the RHP on SEBI</a>`)}`;
+    }
+
+    // ---------- One page per IPO: /ipo/<id> ----------
+    const ipoUrl = (id) => (location.origin.startsWith('http') ? location.origin : location.href.split('#')[0]) + '/ipo/' + encodeURIComponent(id);
+
+    function renderDetail() {
+      const ipo = state.ipos.find((i) => i.id === state.selected);
+      if (!ipo) {
+        $('#page').innerHTML = `<a href="/" data-page="" class="text-sm font-bold text-brand">← All IPOs</a>
+          <p class="mt-4">${state.loaded ? 'IPO not found.' : 'Loading…'}</p>`;
+        return;
+      }
+      $('#page').innerHTML = detailHTML(ipo);
+      document.title = `${ipo.n} IPO GMP, Price Band, Dates & Subscription | ${SITE.name}`;
+    }
+
+    function showIpo(id, push = true) {
+      state.selected = id;
+      $('#home').classList.add('hidden');
+      $('#page').classList.remove('hidden');
+      renderDetail();
+      if (push) { try { history.pushState({}, '', '/ipo/' + encodeURIComponent(id)); } catch (e) { /* opened as a file */ } }
+      window.scrollTo(0, 0);
+    }
+    const openDetail = (id) => showIpo(id);
+
+    // Share buttons on the IPO page
+    function shareIpo(kind) {
+      const i = state.ipos.find((x) => x.id === state.selected);
+      if (!i) return;
+      const url = ipoUrl(i.id);
+      const text = `${i.n} IPO: price band ₹${i.lo}–₹${i.hi}, GMP ${signed(i.gmp)} (${gmpPercent(i)}%). Details:`;
+      if (kind === 'whatsapp') return void window.open('https://wa.me/?text=' + encodeURIComponent(text + ' ' + url), '_blank', 'noopener');
+      if (kind === 'telegram') return void window.open('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text), '_blank', 'noopener');
+      const done = () => {
+        const btn = document.querySelector('[data-share="copy"]');
+        if (btn) { btn.textContent = 'Link copied'; setTimeout(() => { btn.textContent = 'Copy link'; }, 1500); }
+      };
+      if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, () => prompt('Copy this link', url));
+      else prompt('Copy this link', url);
+    }
+
+    // =====================================================
+    // 4b. NAVIGATION, PARTNERS AND THE OTHER VIEWS
+    // =====================================================
+    // [key, desktop label, phone label, icon]
+    const NAV = [
+      ['ipo', 'IPO GMP Tracker', 'IPO GMP', 'fa-fire text-amber-500'],
+      ['dividends', 'Dividends & Bonus', 'Dividends', 'fa-hand-holding-dollar text-emerald-500'],
+      ['calendar', 'Calendar', 'Calendar', 'fa-calendar-days text-blue-400'],
+      ['calc', 'Lot Calculator', 'Calculator', 'fa-calculator text-purple-400'],
+      ['allot', 'Allotment status', 'Allotment', 'fa-clipboard-check text-amber-500']
+    ];
+    const VIEW_PATHS = {
+      ipo: '/ipo-gmp',
+      dividends: '/dividends-bonus',
+      calendar: '/calendar',
+      calc: '/lot-calculator',
+      allot: '/allotment-status'
+    };
+    const VIEW_TITLES = {
+      ipo: 'IPO GMP Tracker',
+      dividends: 'Dividends & Bonus',
+      calendar: 'Calendar',
+      calc: 'Lot Calculator',
+      allot: 'Allotment status'
+    };
+
+    function renderNav() {
+      $('#nav').innerHTML = NAV.map(([key, label, , icon]) => `
+        <a href="${VIEW_PATHS[key]}" data-view="${key}" ${state.view === key ? 'aria-current="page"' : ''} class="rounded-lg px-4 py-1.5 no-underline transition ${state.view === key ? 'bg-card font-bold text-emerald-600 shadow-sm' : 'text-mute hover:text-emerald-500'}"><i class="fa-solid ${icon} mr-1.5"></i> ${label}</a>`).join('');
+      $('#nav-mobile').innerHTML = NAV.map(([key, , label]) => `
+        <a href="${VIEW_PATHS[key]}" data-view="${key}" ${state.view === key ? 'aria-current="page"' : ''} class="whitespace-nowrap rounded-lg px-3 py-1 no-underline ${state.view === key ? 'bg-emerald-500 text-white' : 'bg-pill text-ink'}">${label}</a>`).join('');
+    }
+
+    function renderPartners() {
+      $('#partners').innerHTML = BROKERS.map((b) => `
+        <a href="${esc(b.link)}" target="_blank" rel="sponsored noopener"
+           class="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs font-extrabold text-slate-900 no-underline shadow-md transition hover:-translate-y-0.5 hover:shadow-lg">
+          <img src="${b.logo}" alt="" class="h-5 w-5 object-contain">${esc(b.name)}
+        </a>`).join('');
+    }
+
+    function updateFooterShareLinks() {
+      const url = window.location.href;
+      const text = `BullishBharat — IPO and market calendar: ${url}`;
+      $('#share-whatsapp').href = `https://wa.me/?text=${encodeURIComponent(text)}`;
+      $('#share-x').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent('BullishBharat — IPO and market calendar')}&url=${encodeURIComponent(url)}`;
+      $('#share-linkedin').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+    }
+
+    function toggleWatch(id) {
+      state.watch = state.watch.includes(id) ? state.watch.filter((x) => x !== id) : [...state.watch, id];
+      try { localStorage.setItem('bb_watch', JSON.stringify(state.watch)); } catch (e) { /* storage blocked */ }
+      render();
+    }
+
+    // "28 Oct 2026" -> Date (or null when the date is not announced yet)
+    function parseDate(text) {
+      const [day, mon, year] = String(text || '').split(' ');
+      const index = 'JanFebMarAprMayJunJulAugSepOctNovDec'.indexOf(mon);
+      return index >= 0 && year ? new Date(+year, index / 3, +day) : null;
+    }
+
+    // ---------- Calendar ----------
+    // Every kind of item the calendar can show, with its label and color
+    const CAL_KINDS = {
+      open: { label: 'Opens', color: 'bg-blue-600' },
+      close: { label: 'Closes', color: 'bg-red-600' },
+      allot: { label: 'Allotment', color: 'bg-amber-700' },
+      list: { label: 'Listing', color: 'bg-green-700' },
+      holiday: { label: 'Market closed', color: 'bg-slate-500' },
+      earnings: { label: 'Results', color: 'bg-teal-600' },
+      dividend: { label: 'Dividend', color: 'bg-pink-600' },
+      economic: { label: 'Economic', color: 'bg-violet-600' }
+    };
+    // Pills above the calendar. Which pill does each kind belong to?
+    const CATEGORIES = [['all', 'All'], ['economic', 'Economic'], ['earnings', 'Earnings'], ['dividend', 'Dividends'], ['ipo', 'IPO'], ['holiday', 'Holidays']];
+    const IPO_KINDS = ['open', 'close', 'allot', 'list'];
+    const categoryOf = (kind) => (IPO_KINDS.includes(kind) ? 'ipo' : kind);
+    const eventKind = (type) => (['holiday', 'earnings', 'dividend'].includes(type) ? type : 'economic');
+
+    // All items of one month, sorted by day: [{ day, kind, title, id? }]
+    function calendarItems(year, month, category) {
+      const items = [];
+      const add = (text, kind, title, id) => {
+        const date = parseDate(text);
+        const wanted = category === 'all' || categoryOf(kind) === category;
+        if (wanted && date && date.getFullYear() === year && date.getMonth() === month) items.push({ day: date.getDate(), kind, title, id });
+      };
+      state.ipos.forEach((i) => [['open', i.open], ['close', i.close], ['allot', i.allot], ['list', i.list]]
+        .forEach(([kind, text]) => add(text, kind, i.n, i.id)));
+      state.events.forEach((e) => add(e.date, eventKind(e.type), e.title));
+      return items.sort((a, b) => a.day - b.day);
+    }
+
+    // Text shown inside a pill or a row
+    function calendarText(item, short) {
+      if (item.id) return `${CAL_KINDS[item.kind].label}: ${short ? item.title.split(' ')[0] : item.title}`;
+      return item.kind === 'holiday' ? `Market closed: ${item.title}` : item.title;
+    }
+
+    // Small colored pill used inside a day cell
+    function calendarChip(item) {
+      const attrs = `title="${esc(item.title)}" class="mt-1 block w-full truncate rounded-md px-1.5 py-0.5 text-left text-[10.5px] font-medium text-white ${CAL_KINDS[item.kind].color}"`;
+      const text = esc(calendarText(item, true));
+      return item.id ? `<button data-id="${esc(item.id)}" ${attrs}>${text}</button>` : `<div ${attrs}>${text}</div>`;
+    }
+
+    // One line of the agenda list (and of the selected-day panel)
+    function calendarRow(item, monthName, showDate) {
+      const label = esc(calendarText(item, false));
+      return `
+        <div class="flex items-center gap-3 py-1.5 text-sm">
+          ${showDate ? `<span class="w-14 shrink-0 text-xs font-bold text-mute">${item.day} ${monthName}</span>` : ''}
+          <span class="h-2.5 w-2.5 shrink-0 rounded-full ${CAL_KINDS[item.kind].color}"></span>
+          ${item.id ? `<button data-id="${esc(item.id)}" class="text-left font-medium hover:underline">${label}</button>` : `<span>${label}</span>`}
+        </div>`;
+    }
+
+    const eventsStamp = () => (state.eventsAt
+      ? `Auto-updating · last checked ${state.eventsAt.toLocaleTimeString('en-IN')}`
+      : openedFromFile ? serverRequiredMessage : 'Run server.js for holidays, results and dividends.');
+
+    function calendarHTML() {
+      const today = new Date();
+      const first = new Date(today.getFullYear(), today.getMonth() + state.calMonth, 1);
+      const year = first.getFullYear(), month = first.getMonth();
+      const offset = (first.getDay() + 6) % 7;                  // week starts on Monday
+      const days = new Date(year, month + 1, 0).getDate();
+      const locale = state.lang === 'hi' ? 'hi-IN' : 'en-IN';
+      const monthLabel = first.toLocaleDateString(locale, { month: 'long', year: 'numeric' });
+      const monthName = first.toLocaleDateString(locale, { month: 'short' });
+
+      const items = calendarItems(year, month, state.calCategory);
+      const everything = calendarItems(year, month, 'all');
+      const count = (kind) => everything.filter((it) => it.kind === kind).length;
+      const byDay = {};
+      items.forEach((it) => (byDay[it.day] ||= []).push(it));
+      const holidayDays = new Set(everything.filter((it) => it.kind === 'holiday').map((it) => it.day));
+
+      // Quick numbers for the month
+      let tradingDays = 0;
+      for (let d = 1; d <= days; d++) if ((offset + d - 1) % 7 < 5 && !holidayDays.has(d)) tradingDays++;
+      const stat = (label, value) => `<div class="rounded-xl border border-line bg-card p-3"><div class="text-2xl font-extrabold text-brand">${value}</div><div class="text-xs text-mute">${label}</div></div>`;
+
+      // Month switcher + Today button
+      const header = `
+        <div class="flex flex-wrap items-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 p-4 text-white">
+          <button data-cal="-1" class="h-9 w-9 rounded-full bg-white/20 hover:bg-white/30" aria-label="Previous month">‹</button>
+          <h2 class="min-w-[170px] text-center text-xl font-extrabold">${monthLabel}</h2>
+          <button data-cal="1" class="h-9 w-9 rounded-full bg-white/20 hover:bg-white/30" aria-label="Next month">›</button>
+          <button data-today class="rounded-full bg-white/20 px-3 py-1.5 text-sm font-bold hover:bg-white/30">Today</button>
+        </div>`;
+
+      // Category pills: Economic, Earnings, Dividends, IPO...
+      const pills = CATEGORIES.map(([key, label]) => `
+        <button data-category="${key}" aria-pressed="${state.calCategory === key}"
+                class="rounded-full px-4 py-2 text-sm font-bold ${state.calCategory === key ? 'bg-ink text-bg' : 'bg-soft text-ink'}">${label}</button>`).join('');
+
+      // Day cells
+      const blanks = '<div class="border-b border-r border-line"></div>'.repeat(offset);
+      const cells = Array.from({ length: days }, (_, n) => {
+        const day = n + 1;
+        const isToday = state.calMonth === 0 && day === today.getDate();
+        const isWeekend = (offset + n) % 7 >= 5;                // Saturday / Sunday: market closed
+        const list = byDay[day] || [];
+        const shade = holidayDays.has(day) ? 'bg-slate-500/10' : isWeekend ? 'bg-bg' : '';
+        const ring = state.calDay === day ? 'ring-2 ring-inset ring-brand' : '';
+        return `
+          <div data-day="${day}" tabindex="0" role="button" class="min-h-[96px] cursor-pointer border-b border-r border-line p-1 text-[11px] hover:bg-soft ${shade} ${ring}">
+            <span class="grid h-6 w-6 place-items-center rounded-full text-xs font-bold ${isToday ? 'bg-brand text-white' : ''}">${day}</span>
+            ${list.slice(0, 2).map(calendarChip).join('')}
+            ${list.length > 2 ? `<div class="mt-1 text-[10px] font-bold text-brand">+${list.length - 2} more</div>` : ''}
+          </div>`;
+      }).join('');
+      const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((d) => `<div class="p-2 text-center text-xs font-bold text-mute">${d}</div>`).join('');
+
+      // Panel for the tapped day (scrolls if there are many results that day)
+      let panel = '';
+      if (state.calDay) {
+        const weekend = (offset + state.calDay - 1) % 7 >= 5;
+        const rows = (byDay[state.calDay] || []).map((it) => calendarRow(it, monthName, false)).join('');
+        panel = `
+          <div class="mt-4 rounded-xl border border-brand/40 bg-card p-4">
+            <div class="mb-1 flex items-center justify-between">
+              <b>${state.calDay} ${monthName} ${year}${weekend ? ' · weekend, market closed' : ''}</b>
+              <button data-day="${state.calDay}" class="text-xs text-mute" aria-label="Close day details">✕</button>
+            </div>
+            <div class="max-h-72 overflow-y-auto">${rows || '<p class="text-sm text-mute">Nothing scheduled on this day.</p>'}</div>
+          </div>`;
+      }
+
+      const LIMIT = 60;
+      const agenda = items.length
+        ? items.slice(0, LIMIT).map((it) => calendarRow(it, monthName, true)).join('') + (items.length > LIMIT ? `<p class="pt-2 text-xs text-mute">Showing the first ${LIMIT} of ${items.length}. Tap a day to see all of it.</p>` : '')
+        : '<p class="text-sm text-mute">Nothing scheduled here.</p>';
+
+      return `
+        ${header}
+        <div class="mt-3 flex flex-wrap gap-2">${pills}</div>
+        <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-5">
+          ${stat('Trading days', tradingDays)}
+          ${stat('Market holidays', holidayDays.size)}
+          ${stat('IPO dates', everything.filter((it) => it.id).length)}
+          ${stat('Results due', count('earnings'))}
+          ${stat('Ex-dividend', count('dividend'))}
+        </div>
+        <div class="mt-3 overflow-x-auto rounded-2xl border border-line bg-card">
+          <div class="grid min-w-[640px] grid-cols-7 border-l border-t border-line">${weekdays}${blanks}${cells}</div>
+        </div>
+        <p class="mt-2 text-xs text-mute">Shaded: weekend (market closed). Grey: market holiday. Tap a day for details. <span id="events-at">${eventsStamp()}</span></p>
+        ${panel}
+        <section class="mt-4 rounded-xl border border-line bg-card p-4">
+          <h3 class="mb-1 font-bold">Agenda · ${monthLabel}</h3>${agenda}
+        </section>`;
+    }
+
+    // ---------- Dividends & corporate actions / Earnings (Moneycontrol data from /api/events) ----------
+    const actionType = (title) => {
+      if (/bonus/i.test(title)) return 'Bonus';
+      if (/split/i.test(title)) return 'Split';
+      if (/buy[\s-]?back/i.test(title)) return 'Buyback';
+      if (/rights?\s+issue/i.test(title)) return 'Rights Issue';
+      if (/dividend/i.test(title)) return 'Dividend';
+      return 'Corporate action';
+    };
+
+    // Events of one type from yesterday onwards, nearest first
+    function upcomingEvents(type) {
+      const start = new Date(); start.setHours(0, 0, 0, 0); start.setDate(start.getDate() - 1);
+      return state.events
+        .map((e) => ({ ...e, when: parseDate(e.date) }))
+        .filter((e) => e.type === type && e.when && e.when >= start)
+        .sort((a, b) => a.when - b.when);
+    }
+
+    const viewTitle = (title, note, extra = '') => `
+      <div class="mb-4 flex flex-col justify-between gap-3 md:flex-row md:items-end">
+        <div>
+          <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">${title}</h2>
+          ${note ? `<p class="mt-1 text-sm text-mute">${note}</p>` : ''}
+        </div>${extra}
+      </div>`;
+
+    function dividendsHTML() {
+      const rows = upcomingEvents('dividend');
+      const body = rows.slice(0, 100).map((e) => {
+        const [first, ...rest] = e.title.split(': ');
+        const symbol = e.symbol || first, company = e.company || (e.symbol ? first : '');
+        return `<tr class="border-t border-line transition hover:bg-soft">
+          <td class="px-4 py-3.5"><div class="flex items-center gap-3">${logoHTML({ n: company || symbol, logo: e.logo }, 'h-9 w-9 rounded-lg')}<div class="font-bold">${esc(symbol)}${e.exchange ? `<span class="ml-1 text-[10px] font-medium text-mute">${esc(e.exchange)}</span>` : ''}<div class="text-[11px] font-normal text-mute">${esc(company)}</div></div></div></td>
+          <td class="px-3 py-3.5"><span class="rounded bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold text-emerald-600">${esc(e.actionType || actionType(e.title))}</span></td>
+          <td class="px-3 py-3.5 font-bold">${esc(e.details || rest.join(': '))}</td>
+          <td class="px-3 py-3.5 font-semibold text-amber-500">${esc(e.date)}</td>
+          <td class="px-3 py-3.5 text-mute">${esc(e.record || '–')}</td>
+          <td class="px-4 py-3.5 text-center"><a href="${esc(BROKERS[0].link)}" target="_blank" rel="sponsored noopener" class="text-xs font-bold text-blue-500 hover:underline">Trade</a></td></tr>`;
+      }).join('');
+      const chip = '<div class="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-600"><i class="fa-solid fa-bell mr-1"></i> Buy before Ex-Date to qualify</div>';
+      return `
+        ${viewTitle('Upcoming Dividends & Corporate Actions', '', chip)}
+        <div class="overflow-hidden rounded-xl border border-line bg-card shadow-sm"><div class="overflow-x-auto">
+          <table class="w-full min-w-[700px] border-collapse text-left text-sm">
+            <thead class="border-b border-line bg-pill text-[11px] font-bold uppercase tracking-wider text-mute"><tr>
+              <th class="px-4 py-3.5">Company symbol</th><th class="px-3 py-3.5">Action type</th><th class="px-3 py-3.5">Dividend / ratio</th>
+              <th class="px-3 py-3.5">Ex-date</th><th class="px-3 py-3.5">Record date</th><th class="px-4 py-3.5 text-center">Trade</th></tr></thead>
+            <tbody>${body || '<tr><td colspan="6" class="py-8 text-center text-mute">No corporate action data is available from Moneycontrol or BSE yet.</td></tr>'}</tbody>
+          </table></div></div>
+        ${rows.length > 100 ? `<p class="mt-2 text-xs text-mute">Showing the first 100 of ${rows.length}.</p>` : ''}`;
+    }
+
+    function earningsHTML() {
+      const toggle = `<div class="flex shrink-0 gap-1 rounded-xl bg-pill p-1 text-xs font-bold">${[['cards', 'Cards'], ['month', 'Month view']].map(([key, label]) => `
+        <button data-earn="${key}" class="rounded-lg px-3 py-1.5 ${state.earnView === key ? 'bg-card text-emerald-600 shadow-sm' : 'text-mute'}">${label}</button>`).join('')}</div>`;
+      const head = viewTitle('Quarterly Results & Earnings Calendar', '', toggle);
+      if (state.earnView === 'month') return head + calendarHTML();
+      const rows = upcomingEvents('earnings');
+      const cards = rows.slice(0, 60).map((e) => {
+        const first = e.title.split(': ')[0];
+        const symbol = e.symbol || first, company = e.company || (e.symbol ? first : '');
+        return `
+        <div class="rounded-xl border border-line bg-card p-5 shadow-sm transition hover:border-blue-500/50">
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-2 font-extrabold">${logoHTML({ n: company || symbol, logo: e.logo }, 'h-8 w-8')}${esc(symbol)}</span>
+            <span class="rounded bg-emerald-500/20 px-2 py-0.5 text-xs font-bold text-emerald-600">Results</span>
+          </div>
+          <p class="mt-0.5 text-xs text-mute">${esc(company)}</p>
+          <div class="mt-4 space-y-2 border-t border-line pt-3 text-xs">
+            <div class="flex justify-between"><span class="text-mute">Result date</span><b>${esc(e.date)}</b></div>
+            <div class="flex justify-between gap-3"><span class="text-mute">Purpose</span><span class="text-right font-semibold">${esc(e.purpose || 'Financial results')}</span></div>
+          </div>
+        </div>`;
+      }).join('');
+      return `${head}
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">${cards}</div>
+        ${rows.length > 60 ? `<p class="mt-2 text-xs text-mute">Showing the first 60 of ${rows.length}. Use Month view to see a whole day.</p>` : ''}`;
+    }
+
+    // ---------- Demat deals ----------
+    function brokersHTML() {
+      const cards = BROKERS.map((b) => `
+        <div class="flex flex-col justify-between rounded-2xl border border-line bg-card p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-500 hover:shadow-lg">
+          <div>
+            <div class="flex items-center gap-3">
+              <span class="grid h-10 w-10 place-items-center rounded-full border border-line bg-white"><img src="${b.logo}" alt="${esc(b.name)} logo" class="h-6 w-6 object-contain"></span>
+              <span class="text-lg font-black">${esc(b.name)}</span>
+            </div>
+            <p class="mt-2 text-xs text-mute">${esc(b.offer)}</p>
+            <ul class="mt-4 space-y-2 text-xs">${BROKER_FEATURES.map((f) => `<li><i class="fa-solid fa-check mr-1.5 text-emerald-500"></i>${f}</li>`).join('')}</ul>
+          </div>
+          <div class="mt-6 border-t border-line pt-4">
+            <a href="${esc(b.link)}" target="_blank" rel="sponsored noopener"
+               class="block rounded-lg py-2 text-center text-xs font-bold text-white no-underline shadow-sm transition ${b.btn}">Open account</a>
+          </div>
+        </div>`).join('');
+      return `
+        <div class="mx-auto mb-4 max-w-2xl text-center">
+          <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">Compare Top Demat Accounts for IPOs</h2>
+          <p class="mt-1 text-sm text-mute">Applying through the demat accounts of several family members can improve your chances of an IPO allotment. These are partner links: we may earn a commission at no extra cost to you.</p>
+        </div>
+        <div class="grid gap-6 pt-2 sm:grid-cols-2 lg:grid-cols-4">${cards}</div>`;
+    }
+
+    // ---------- Lot & profit calculator ----------
+    function pickCalcIpo(id) {
+      const i = state.ipos.find((x) => x.id === id);
+      if (!i) return;
+      Object.assign(state.calc, { id, price: i.hi || '', lot: i.lot || '', gmp: i.gmp });
+    }
+
+    function calcHTML() {
+      if (!state.calc.id && state.ipos.length) pickCalcIpo(state.ipos[0].id);   // fill the form once
+      const c = state.calc;
+      const options = state.ipos.map((i) => `<option value="${esc(i.id)}" ${i.id === c.id ? 'selected' : ''}>${esc(i.n)}</option>`).join('');
+      const field = 'w-full rounded-lg border border-line bg-bg px-3 py-2.5 text-sm font-semibold';
+      const label = 'mb-1.5 block text-xs font-bold uppercase text-mute';
+      return `
+        <div class="mx-auto max-w-3xl">
+          <div class="mb-6 text-center">
+            <h2 class="text-2xl font-extrabold tracking-tight">IPO application & profit calculator</h2>
+            <p class="mt-1 text-sm text-mute">Estimate the money you need and the possible profit from the lots you apply for and the GMP.</p>
+          </div>
+          <div class="rounded-2xl border border-line bg-card p-6 shadow-lg">
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div class="sm:col-span-2"><label class="${label}">Select IPO</label><select data-calc="id" class="${field}">${options}</select></div>
+              <div><label class="${label}">Issue price (cut-off) ₹</label><input data-calc="price" type="number" min="0" value="${c.price}" class="${field}"></div>
+              <div><label class="${label}">Lot size (shares per lot)</label><input data-calc="lot" type="number" min="1" value="${c.lot}" class="${field}"></div>
+              <div><label class="${label}">Expected GMP (₹)</label><input data-calc="gmp" type="number" value="${c.gmp}" class="${field}"></div>
+              <div><label class="${label}">Lots applied</label>
+                <div class="flex items-center gap-2">
+                  <input data-calc="lots" type="range" min="1" max="14" value="${c.lots}" class="w-full accent-emerald-500">
+                  <input data-calc="lots" type="number" min="1" max="50" value="${c.lots}" class="w-16 rounded-lg border border-line bg-bg p-2 text-center text-sm font-bold">
+                </div></div>
+            </div>
+            <div id="calc-result" class="mt-8 grid grid-cols-2 gap-4 border-t border-line pt-6 text-center sm:grid-cols-4"></div>
+          </div>
+        </div>`;
+    }
+
+    function updateCalc() {
+      const price = parseFloat(state.calc.price) || 0, lot = parseInt(state.calc.lot) || 0;
+      const gmp = parseFloat(state.calc.gmp) || 0, lots = Math.max(1, parseInt(state.calc.lots) || 1);
+      const shares = lot * lots, capital = price * shares, profit = gmp * shares;
+      const percent = price ? ((gmp / price) * 100).toFixed(1) : '0.0';
+      const box = (label, value, extra = '') => `<div class="rounded-xl border border-line bg-bg p-3 ${extra}"><span class="text-[11px] font-bold uppercase text-mute">${label}</span><p class="mt-1 text-lg font-extrabold">${value}</p></div>`;
+      $('#calc-result').innerHTML =
+        box('Total shares', shares) + box('Capital needed', `<span class="text-blue-500">${rupee(capital)}</span>`) + box('Est. listing price', `<span class="text-emerald-500">${rupee(price + gmp)}</span>`) +
+        box('Expected profit', `<span class="${profit >= 0 ? 'text-up' : 'text-down'}">${profit < 0 ? '-' : '+'}${rupee(Math.abs(profit))} (${percent}%)</span>`, 'border-emerald-500/30 bg-emerald-500/10') +
+        (capital > 200000 ? '<p class="col-span-full text-xs text-mute">Retail investors can apply up to ₹2,00,000 per application.</p>' : '');
+    }
+
+    // ---------- Allotment status ----------
+    function allotHTML() {
+      const links = REGISTRARS.map(([name, url]) => `
+        <a href="${url}" target="_blank" rel="noopener" class="block rounded-xl border border-line bg-card p-4 font-bold no-underline hover:bg-soft">
+          ${name}<span class="block text-xs font-normal text-mute">${url.split('/')[2]}</span></a>`).join('');
+      return `
+        <h2 class="mb-1 text-xl font-bold">Check your allotment</h2>
+        <p class="mb-4 text-mute">Find the registrar name in the IPO’s RHP, open that registrar below, then enter your PAN or application number.</p>
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">${links}</div>`;
+    }
+
+    // ---------- Watchlist ----------
+    function watchHTML() {
+      const saved = state.ipos.filter((i) => state.watch.includes(i.id));
+      return `<h2 class="mb-3 text-xl font-bold">Watchlist</h2>` + (saved.length
+        ? `<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">${saved.map(cardHTML).join('')}</div>`
+        : '<p class="text-mute">Tap the ☆ on any IPO card to save it here.</p>');
+    }
+
+    function renderOther() {
+      const views = { dividends: dividendsHTML, earnings: earningsHTML, calendar: calendarHTML, calc: calcHTML, brokers: brokersHTML, allot: allotHTML, watch: watchHTML };
+      $('#view-other').innerHTML = views[state.view]();
+      if (state.view === 'calc') updateCalc();
+    }
+
+    // =====================================================
+    // 5. EVENTS
+    // =====================================================
+    $('#search').addEventListener('input', (e) => { state.query = e.target.value; renderIpoTable(); });
+
+    // One click handler shared by the IPO grid and the other views
+    function onViewClick(e) {
+      if (e.target.closest('a[href^="http"]')) return;            // Apply / Trade links open the broker, not the IPO page
+      const earn = e.target.closest('[data-earn]');
+      if (earn) { state.earnView = earn.dataset.earn; return render(); }
+      const star = e.target.closest('[data-star]');
+      if (star) return toggleWatch(star.dataset.star);
+      const month = e.target.closest('[data-cal]');
+      if (month) { state.calMonth += +month.dataset.cal; state.calDay = null; return render(); }
+      if (e.target.closest('[data-today]')) { state.calMonth = 0; state.calDay = new Date().getDate(); return render(); }
+      const category = e.target.closest('[data-category]');
+      if (category) { state.calCategory = category.dataset.category; return render(); }
+      const filter = e.target.closest('[data-filter]');
+      if (filter) { state.filter = filter.dataset.filter; return renderIpoTable(); }
+      const card = e.target.closest('[data-id]');
+      if (card) return openDetail(card.dataset.id);
+      const day = e.target.closest('[data-day]');
+      if (day) { state.calDay = state.calDay === +day.dataset.day ? null : +day.dataset.day; render(); }
+    }
+    $('#view-ipos').addEventListener('click', onViewClick);
+    $('#view-other').addEventListener('click', onViewClick);
+    $('#view-other').addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.dataset.day) onViewClick(e); });
+
+    // View links keep each dashboard section on its own shareable URL.
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-view]');
+      if (!btn) return;
+      e.preventDefault();
+      const view = btn.dataset.view;
+      showPage('');                                   // leave any IPO or info page
+      state.view = view;
+      if (VIEW_PATHS[view]) {
+        try { history.replaceState({}, '', VIEW_PATHS[view]); } catch (error) { /* opened as a file */ }
+        document.title = `${VIEW_TITLES[view]} – ${SITE.name}`;
+      }
+      updateFooterShareLinks();
+      render();
+      window.scrollTo(0, 0);
+    });
+
+    // Calculator fields: update the numbers live
+    $('#view-other').addEventListener('input', (e) => {
+      const field = e.target.closest('[data-calc]');
+      if (!field) return;
+      const key = field.dataset.calc;
+      if (key === 'id') { pickCalcIpo(field.value); return renderOther(); }   // new IPO: refill the form
+      state.calc[key] = field.value;
+      if (key === 'lots') document.querySelectorAll('[data-calc="lots"]').forEach((el) => { el.value = field.value; });
+      updateCalc();
+    });
+    $('#view-ipos').addEventListener('keydown', (e) => {
+      const card = e.target.closest('[data-id]');
+      if (card && e.key === 'Enter') openDetail(card.dataset.id);
+    });
+
+    document.addEventListener('click', (e) => {
+      const pill = e.target.closest('[data-investor]');
+      if (pill) { state.investor = pill.dataset.investor; return renderDetail(); }
+      const share = e.target.closest('[data-share]');
+      if (share) shareIpo(share.dataset.share);
+    });
+
+    // Start in light mode; the icon button switches between light and dark.
+    const ICON_ATTRS = 'viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
+    const MOON_ICON = `<svg ${ICON_ATTRS}><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>`;
+    const SUN_ICON = `<svg ${ICON_ATTRS}><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>`;
+
+    function setTheme(mode) {
+      document.documentElement.dataset.theme = mode;
+      $('#theme-btn').innerHTML = mode === 'dark' ? SUN_ICON : MOON_ICON;
+      $('#theme-btn').setAttribute('aria-label', mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+    }
+    $('#theme-btn').addEventListener('click', () =>
+      setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
+    setTheme('light');
+
+    // =====================================================
+    // 7. INFO PAGES: About, Privacy Policy, Disclaimer, Contact
+    // CHANGE THE DETAILS BELOW (email, owner, domain) BEFORE GOING LIVE.
+    // Have a lawyer read the Privacy Policy and Disclaimer once. These are standard texts, not legal advice.
+    // =====================================================
+    const SITE = {
+      name: 'BullishBharat',
+      domain: 'bullishbharat.in',
+      owner: 'Rupesh Dahiya',                  // person or company that runs the site
+      email: 'rupeshk0155@gmail.com',     // where visitors can write to you
+      updated: '24 October 2026'           // change when you edit the policies
+    };
+
+    // Small helpers so each page reads like plain text
+    const h2 = (text) => `<h2 class="mt-7 text-lg font-bold">${text}</h2>`;
+    const para = (text) => `<p class="mt-2">${text}</p>`;
+    const bullets = (items) => `<ul class="mt-2 list-disc space-y-1 pl-5">${items.map((x) => `<li>${x}</li>`).join('')}</ul>`;
+    const mail = () => `<a class="font-bold text-brand underline" href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a>`;
+
+    const PAGES = {
+      about: {
+        title: 'About',
+        body: () => `
+          ${para(`${SITE.name} is a free information website for people who follow IPOs in the Indian market. We bring the open, upcoming and closed IPOs, their grey market premium (GMP), subscription status and key dates into one simple place.`)}
+          ${h2('What you can find here')}
+          ${bullets([
+          'A list of open, upcoming and closed IPOs with price band, lot size, issue size and dates',
+          'Grey market premium (GMP) and an estimated listing price',
+          'An IPO calendar with market holidays, results, dividends and economic events',
+          'A profit calculator and links to the registrars where you check your allotment',
+          'A watchlist saved in your own browser'
+        ])}
+          ${h2('Where the data comes from')}
+          ${para('IPO dates, price bands and other issue details are collected from public NSE/BSE and Chittorgarh pages and may be delayed or incomplete. Market holidays are taken from public NSE data. GMP is unofficial grey market information maintained separately; it is not a live exchange feed and can be wrong, late or very different from the final listing price.')}
+          ${h2('How the site is funded')}
+          ${para('Some links, such as the broker partner cards, are affiliate links. If you open an account through them we may earn a commission at no extra cost to you. We may also show advertisements. This never changes the data we show.')}
+          ${h2('Who runs this site')}
+          ${para(`${esc(SITE.name)} is run by ${esc(SITE.owner)}. You can reach us on the <a class="font-bold text-brand underline" href="/contact" data-page="contact">Contact page</a> or at ${mail()}.`)}`
+      },
+      privacy: {
+        title: 'Privacy Policy',
+        body: () => `
+          ${para(`Last updated: ${esc(SITE.updated)}. This policy explains what information ${esc(SITE.name)} (${esc(SITE.domain)}) collects and how it is used.`)}
+          ${h2('1. Information we collect')}
+          ${bullets([
+          '<b>No account needed.</b> You do not have to sign up, and we do not ask for your name, phone number, PAN or any financial details.',
+          '<b>Saved in your browser.</b> Your watchlist is stored in your own browser (local storage). It stays on your device and we cannot see it.',
+          '<b>If you write to us.</b> If you send an email, we receive your email address and the message you write.',
+          '<b>Server logs.</b> Like most websites, our hosting records technical details such as IP address, browser type and the pages visited, for security and to keep the site running.'
+        ])}
+          ${h2('2. Cookies, ads and analytics')}
+          ${para('If we show advertisements or use analytics, third-party vendors, including Google, may use cookies to show ads based on your earlier visits to this and other websites, and to measure traffic. You can opt out of personalised advertising in <a class="underline" target="_blank" rel="noopener" href="https://adssettings.google.com">Google Ads Settings</a> or at <a class="underline" target="_blank" rel="noopener" href="https://www.aboutads.info">aboutads.info</a>. You can also block or delete cookies in your browser settings.')}
+          ${h2('3. Links to other websites')}
+          ${para('This site links to brokers, registrars, exchanges and other websites. We do not control them and are not responsible for their privacy practices. Please read their policies. Some broker links are affiliate links; the broker may record that you came from our site.')}
+          ${h2('4. How we use and share information')}
+          ${bullets([
+          'We use information only to run the site, answer your messages and improve the service.',
+          'We do not sell your personal information.',
+          'We may share information if the law requires it.'
+        ])}
+          ${h2('5. Children')}
+          ${para('This site is meant for adults. It is not directed at children under 18, and we do not knowingly collect information from them.')}
+          ${h2('6. Your choices')}
+          ${para(`You can clear your watchlist any time by clearing this site’s data in your browser. To ask us to delete an email you sent, write to ${mail()}.`)}
+          ${h2('7. Changes to this policy')}
+          ${para('We may update this policy from time to time. The date at the top shows when it last changed.')}
+          ${h2('8. Contact')}
+          ${para(`Questions about privacy? Write to ${mail()}.`)}`
+      },
+      disclaimer: {
+        title: 'Disclaimer',
+        body: () => `
+          ${para(`Last updated: ${esc(SITE.updated)}. Please read this before using any information on ${esc(SITE.name)}.`)}
+          ${h2('Not investment advice')}
+          ${para('Everything on this site is for general information and education only. It is not investment, financial, tax or legal advice, and it is not a recommendation to apply for, buy or sell any IPO or security. Unless stated otherwise on this page, BullishBharat is not a SEBI-registered investment adviser or research analyst.')}
+          ${h2('About GMP (grey market premium)')}
+          ${para('GMP is unofficial information from an unregulated grey market. It is not published by SEBI, NSE or BSE, and it can change quickly or be wrong. A high GMP does not guarantee a listing gain, and the listing price can be lower than the issue price. We do not encourage or help anyone to trade in the grey market.')}
+          ${h2('Data may be wrong or late')}
+          ${para('We try to keep dates, prices and subscription numbers correct, but we give no promise that they are complete, accurate or up to date. Always check the official offer documents (RHP / prospectus), the exchange websites and the registrar before you decide.')}
+          ${h2('Investing has risk')}
+          ${para('Investing in IPOs and shares involves risk, and you can lose some or all of your money. Past performance does not show future results. Speak to a SEBI-registered investment adviser if you need advice for your situation.')}
+          ${h2('Affiliate links and ads')}
+          ${para('Some links on this site, for example to brokers, are affiliate links. We may earn a commission if you open an account through them, at no extra cost to you. We may also show advertisements. These do not change the information we publish and are not an endorsement.')}
+          ${h2('Limitation of liability')}
+          ${para(`To the fullest extent allowed by law, ${esc(SITE.name)} and ${esc(SITE.owner)} are not liable for any loss or damage that results from using this site or relying on its content.`)}`
+      },
+      contact: {
+        title: 'Contact',
+        body: () => `
+          ${para('Found a mistake in an IPO date or price, or want to ask something? Send us a message.')}
+          ${SITE.email.includes('yourdomain') ? '<p class="mt-3 rounded-lg border border-amber-500 bg-amber-500/10 p-3 text-sm">Site owner: replace <b>SITE.email</b> in the code with your real email address.</p>' : ''}
+          <form id="contact-form" class="mt-4 grid gap-3">
+            <label class="grid gap-1 text-sm text-mute">Your name<input name="name" required class="rounded-lg border border-line bg-card px-3 py-2 text-ink"></label>
+            <label class="grid gap-1 text-sm text-mute">Your email<input name="email" type="email" required class="rounded-lg border border-line bg-card px-3 py-2 text-ink"></label>
+            <label class="grid gap-1 text-sm text-mute">Message<textarea name="message" rows="5" required class="rounded-lg border border-line bg-card px-3 py-2 text-ink"></textarea></label>
+            <button class="w-fit rounded-lg bg-brand px-5 py-2.5 font-bold text-white">Send message</button>
+            <p class="text-xs text-mute">This opens your email app with the message ready to send.</p>
+          </form>
+          ${h2('Email')}
+          ${para(`${mail()}`)}
+          ${para('We reply as soon as we can. We cannot give personal investment advice.')}`
+      }
+    };
+
+    const DEFAULT_TITLE = document.title;
+
+    // Which page does the address bar ask for? (/about, /privacy... or #about when opened as a file)
+    function pageFromUrl() {
+      const name = location.pathname.split('/').pop() || location.hash.slice(1);
+      return PAGES[name] ? name : '';
+    }
+
+    function showPage(name, push = true) {
+      state.selected = null;                                       // leaving any IPO page
+      const page = PAGES[name];
+      $('#home').classList.toggle('hidden', !!page);
+      $('#page').classList.toggle('hidden', !page);
+      if (page) {
+        $('#page').innerHTML = `<h1 class="text-3xl font-extrabold tracking-tight">${page.title}</h1>${page.body()}`;
+        document.title = `${page.title} – ${SITE.name}`;
+      } else {
+        document.title = DEFAULT_TITLE;
+      }
+      if (push) { try { history.pushState({}, '', page ? '/' + name : '/'); } catch (e) { /* opened as a file */ } }
+      updateFooterShareLinks();
+      window.scrollTo(0, 0);
+    }
+
+    // The contact form opens the visitor's email app (no server needed)
+    function contactMailto(form) {
+      const data = new FormData(form);
+      const subject = `Message from ${data.get('name')} via ${SITE.name}`;
+      const body = `${data.get('message')}\n\nFrom: ${data.get('name')} (${data.get('email')})`;
+      return `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a[data-page]');
+      if (!link || e.metaKey || e.ctrlKey) return;                 // let "open in new tab" work
+      e.preventDefault();
+      if (!link.dataset.page) {
+        state.view = 'ipo';
+        render();
+      }
+      showPage(link.dataset.page);
+    });
+    document.addEventListener('submit', (e) => {
+      if (e.target.id !== 'contact-form') return;
+      e.preventDefault();
+      location.href = contactMailto(e.target);
+    });
+    // Open whatever the address bar asks for: /ipo/<id>, /about, /privacy... or the home page
+    function routeFromUrl() {
+      const parts = location.pathname.split('/').filter(Boolean);
+      if (parts[0] === 'ipo' && parts[1]) return showIpo(decodeURIComponent(parts[1]), false);
+      const view = Object.keys(VIEW_PATHS).find(key => VIEW_PATHS[key] === `/${parts[0] || ''}`);
+      if (view) {
+        state.view = view;
+        showPage('', false);
+        document.title = `${VIEW_TITLES[view]} – ${SITE.name}`;
+        render();
+        return;
+      }
+      state.view = 'ipo';
+      render();
+      showPage(pageFromUrl(), false);
+    }
+    addEventListener('popstate', routeFromUrl);
+
+    // =====================================================
+    // 8. LANGUAGE (English / Hindi)
+    // Every visible English text is looked up here and swapped for Hindi.
+    // To translate more, add a line:  'English text': 'हिंदी टेक्स्ट'
+    // =====================================================
+    const HI = {
+      'LIVE IPO & GMP HUB': 'लाइव IPO और GMP हब',
+      'sample data': 'सैंपल डेटा', 'live data': 'लाइव डेटा',
+      'Track every IPO and its GMP in one place.': 'हर IPO और उसका GMP, एक ही जगह।',
+      'Open, upcoming and closed IPOs with grey-market premium, subscription status and key details.': 'ओपन, अपकमिंग और क्लोज्ड IPO, ग्रे-मार्केट प्रीमियम, सब्सक्रिप्शन और ज़रूरी जानकारी के साथ।',
+      'Open IPOs': 'ओपन IPO', 'Upcoming': 'अपकमिंग', 'Closed & Listed': 'क्लोज्ड और लिस्टेड', 'Search IPO': 'IPO खोजें',
+      'Offer starts on': 'ऑफर शुरू', 'Bid price range': 'बिड प्राइस रेंज', 'To be announced': 'घोषित होना बाकी',
+      'PARTNER DEMAT & TRADING PLATFORMS': 'पार्टनर डीमैट और ट्रेडिंग प्लेटफ़ॉर्म', 'Partner links. Offers may change.': 'पार्टनर लिंक। ऑफर बदल सकते हैं।',
+      'Open a demat account': 'डीमैट अकाउंट खोलें', 'Trade stocks and F&O': 'स्टॉक्स और F&O ट्रेड करें', 'Stocks, IPOs and MF': 'स्टॉक्स, IPO और म्यूचुअल फंड', 'Fast trading platform': 'तेज़ ट्रेडिंग प्लेटफ़ॉर्म',
+      'Calendar': 'कैलेंडर', 'Profit calculator': 'प्रॉफिट कैलकुलेटर', 'Allotment status': 'अलॉटमेंट स्टेटस', 'Watchlist': 'वॉचलिस्ट',
+      'LIVE GMP': 'लाइव GMP', 'No GMP data yet.': 'अभी GMP डेटा नहीं है।', 'Sample GMP. Run server.js for live values.': 'सैंपल GMP। लाइव वैल्यू के लिए server.js चलाएँ।',
+      'GMP is unofficial grey-market data, not a guarantee of listing price. This is not investment advice. Read the RHP and consult a SEBI-registered advisor.': 'GMP अनौपचारिक ग्रे-मार्केट डेटा है, लिस्टिंग प्राइस की गारंटी नहीं। यह निवेश की सलाह नहीं है। RHP पढ़ें और SEBI-रजिस्टर्ड सलाहकार से पूछें।',
+      'About': 'हमारे बारे में', 'Privacy Policy': 'प्राइवेसी पॉलिसी', 'Disclaimer': 'अस्वीकरण', 'Contact': 'संपर्क',
+      'Explore': 'देखें', 'Data & updates': 'डेटा और अपडेट', 'Share this dashboard': 'यह डैशबोर्ड शेयर करें',
+      'Your dashboard for Indian IPOs, corporate actions and market dates.': 'भारतीय IPO, कॉर्पोरेट एक्शन और बाज़ार की तारीख़ों का आपका डैशबोर्ड।',
+      'Contact us': 'संपर्क करें', 'IPO & GMP:': 'IPO और GMP:', 'Results & corporate actions:': 'नतीजे और कॉर्पोरेट एक्शन:',
+      'Market holidays:': 'बाज़ार की छुट्टियाँ:', 'about every 15 minutes': 'लगभग हर 15 मिनट में',
+      'about every 3 hours': 'लगभग हर 3 घंटे में', 'about every 12 hours': 'लगभग हर 12 घंटे में',
+      'Back to top': 'ऊपर जाएँ',
+      '← All IPOs': '← सभी IPO', 'Copy link': 'लिंक कॉपी करें', 'Link copied': 'लिंक कॉपी हो गया', 'IPO not found.': 'IPO नहीं मिला।', 'Loading…': 'लोड हो रहा है…',
+      'Investor type': 'निवेशक का प्रकार', 'Retail': 'रिटेल', 'Employee': 'कर्मचारी', 'Shareholder': 'शेयरधारक',
+      'Lot size': 'लॉट साइज़', 'Discount': 'डिस्काउंट', 'Retail discount': 'रिटेल डिस्काउंट', 'Employee discount': 'कर्मचारी डिस्काउंट', 'Issue size': 'इश्यू साइज़',
+      'Offer type': 'ऑफर टाइप', 'IPO type': 'IPO टाइप', 'Mainboard': 'मेनबोर्ड', 'Book building': 'बुक बिल्डिंग',
+      'Minimum investment': 'न्यूनतम निवेश', 'Maximum investment': 'अधिकतम निवेश', 'No upper limit': 'कोई ऊपरी सीमा नहीं',
+      'Important dates': 'ज़रूरी तारीख़ें', 'Offer starts': 'ऑफर शुरू', 'Offer ends': 'ऑफर खत्म', 'Allotment': 'अलॉटमेंट', 'Listing': 'लिस्टिंग',
+      'Subscription details': 'सब्सक्रिप्शन विवरण', 'Category': 'कैटेगरी', 'Times subscribed': 'कितने गुना सब्सक्राइब', 'Total': 'कुल',
+      'Subscription data appears after bidding starts.': 'बिडिंग शुरू होने के बाद सब्सक्रिप्शन डेटा दिखेगा।',
+      'Live subscription data is currently unavailable.': 'लाइव सब्सक्रिप्शन डेटा अभी उपलब्ध नहीं है।',
+      'GMP trend': 'GMP ट्रेंड', 'About the company': 'कंपनी के बारे में', 'Objective of the issue': 'इश्यू का उद्देश्य', 'Details will be added soon.': 'जानकारी जल्द जोड़ी जाएगी।',
+      'Financials (₹ cr)': 'वित्तीय आंकड़े (₹ करोड़)', 'Year': 'वर्ष', 'Revenue': 'राजस्व', 'Profit (PAT)': 'मुनाफ़ा (PAT)',
+      'Period ended': 'अवधि समाप्त',
+      'Shareholding pattern': 'शेयरहोल्डिंग पैटर्न', 'Holder': 'धारक', 'Pre-IPO': 'IPO से पहले', 'Post-IPO': 'IPO के बाद',
+      'Chittorgarh financial data unavailable.': 'Chittorgarh से वित्तीय डेटा उपलब्ध नहीं है.',
+      'Chittorgarh shareholding data unavailable.': 'Chittorgarh से शेयरहोल्डिंग डेटा उपलब्ध नहीं है.',
+      'Strengths': 'मज़बूत पक्ष', 'Risks': 'जोखिम', 'Company report': 'कंपनी रिपोर्ट', 'Read the RHP on SEBI': 'SEBI पर RHP पढ़ें',
+      'Today': 'आज', 'All': 'सभी', 'Economic': 'आर्थिक', 'Earnings': 'नतीजे', 'Dividends': 'डिविडेंड', 'Holidays': 'छुट्टियाँ',
+      'Trading days': 'ट्रेडिंग दिन', 'Market holidays': 'बाज़ार की छुट्टियाँ', 'IPO dates': 'IPO की तारीख़ें', 'Results due': 'नतीजे आने वाले', 'Ex-dividend': 'एक्स-डिविडेंड',
+      'Mon': 'सोम', 'Tue': 'मंगल', 'Wed': 'बुध', 'Thu': 'गुरु', 'Fri': 'शुक्र', 'Sat': 'शनि', 'Sun': 'रवि',
+      'Shaded: weekend (market closed). Grey: market holiday. Tap a day for details.': 'शेड वाले दिन: वीकेंड (बाज़ार बंद)। ग्रे: बाज़ार की छुट्टी। विवरण के लिए किसी दिन पर टैप करें।',
+      'Run server.js for live holidays, results and dividends.': 'लाइव छुट्टियों, नतीजों और डिविडेंड के लिए server.js चलाएँ।',
+      'Nothing scheduled here.': 'यहाँ कुछ तय नहीं है।', 'Nothing scheduled on this day.': 'इस दिन कुछ तय नहीं है।', 'No IPOs found.': 'कोई IPO नहीं मिला।',
+      'Number of lots': 'लॉट की संख्या', 'Listing price (₹, optional)': 'लिस्टिंग प्राइस (₹, वैकल्पिक)', 'Uses price band + GMP': 'प्राइस बैंड + GMP से',
+      'Expected listing price': 'अनुमानित लिस्टिंग प्राइस', 'Profit / loss': 'मुनाफ़ा / नुकसान',
+      'Retail investors can apply up to ₹2,00,000 per application.': 'रिटेल निवेशक एक आवेदन में अधिकतम ₹2,00,000 तक लगा सकते हैं।',
+      'Check your allotment': 'अपना अलॉटमेंट चेक करें',
+      'Find the registrar name in the IPO’s RHP, open that registrar below, then enter your PAN or application number.': 'IPO के RHP में रजिस्ट्रार का नाम देखें, नीचे उसी की साइट खोलें और PAN या एप्लीकेशन नंबर डालें।',
+      'Tap the ☆ on any IPO card to save it here.': 'किसी भी IPO कार्ड का ☆ दबाएँ, वह यहाँ सेव हो जाएगा।',
+      'NSE · delayed': 'NSE · देरी से', 'IPO GMP Tracker': 'IPO GMP ट्रैकर', 'Dividends & Bonus': 'डिविडेंड और बोनस', 'Lot Calculator': 'लॉट कैलकुलेटर',
+      'Search company (e.g. Swiggy, Tata)...': 'कंपनी खोजें (जैसे Swiggy, Tata)...',
+      'All IPOs': 'सभी IPO', 'Open Now': 'अभी खुले', 'Closed': 'क्लोज्ड',
+      'IPO name & category': 'IPO नाम और कैटेगरी', 'Price band': 'प्राइस बैंड', 'Current GMP': 'मौजूदा GMP', 'Est. listing': 'अनुमानित लिस्टिंग',
+      'Est. gain (%)': 'अनुमानित फ़ायदा (%)', 'Profit / lot': 'मुनाफ़ा / लॉट', 'Status': 'स्टेटस', 'Action': 'एक्शन', 'Details →': 'विवरण →',
+      'OPEN': 'ओपन', 'UPCOMING': 'अपकमिंग', 'CLOSED': 'क्लोज्ड', 'No matching IPOs found.': 'कोई IPO नहीं मिला।',
+      'Upcoming dividends & bonus': 'आने वाले डिविडेंड और बोनस', 'Buy before the ex-date to qualify. Data from NSE corporate actions.': 'लाभ के लिए एक्स-डेट से पहले खरीदें। डेटा NSE कॉर्पोरेट एक्शन से।',
+      'Company': 'कंपनी', 'Details': 'विवरण', 'Ex-date': 'एक्स-डेट', 'Dividend': 'डिविडेंड', 'Bonus': 'बोनस', 'Split': 'स्प्लिट',
+      'No dividend data yet. Run server.js to load NSE data.': 'अभी डिविडेंड डेटा नहीं है। NSE डेटा के लिए server.js चलाएँ।',
+      'Quarterly results calendar': 'तिमाही नतीजों का कैलेंडर', 'Financial results': 'वित्तीय नतीजे', 'Result date': 'नतीजे की तारीख़',
+      'Companies that have told NSE the date of their board meeting for financial results.': 'वे कंपनियाँ जिन्होंने वित्तीय नतीजों के लिए बोर्ड मीटिंग की तारीख़ NSE को बताई है।',
+      'No results data yet. Run server.js to load NSE data.': 'अभी नतीजों का डेटा नहीं है। NSE डेटा के लिए server.js चलाएँ।',
+      'Compare demat accounts for IPOs': 'IPO के लिए डीमैट अकाउंट की तुलना', 'Open account': 'अकाउंट खोलें',
+      'Demat and trading account': 'डीमैट और ट्रेडिंग अकाउंट', 'Apply for IPOs with UPI': 'UPI से IPO के लिए आवेदन करें', 'Check current charges on the broker site': 'मौजूदा चार्ज ब्रोकर की साइट पर देखें',
+      'You need a demat account and UPI to apply for an IPO. These are partner links: we may earn a commission at no extra cost to you.': 'IPO के लिए आवेदन करने के लिए डीमैट अकाउंट और UPI चाहिए। ये पार्टनर लिंक हैं: आपको कोई अतिरिक्त खर्च नहीं, पर हमें कमीशन मिल सकता है।',
+      'IPO application & profit calculator': 'IPO आवेदन और प्रॉफिट कैलकुलेटर', 'Select IPO': 'IPO चुनें', 'Issue price (cut-off) ₹': 'इश्यू प्राइस (कट-ऑफ) ₹',
+      'Lot size (shares per lot)': 'लॉट साइज़ (प्रति लॉट शेयर)', 'Expected GMP (₹)': 'अपेक्षित GMP (₹)', 'Lots applied': 'आवेदन किए लॉट',
+      'Total shares': 'कुल शेयर', 'Capital needed': 'ज़रूरी पूँजी', 'Est. listing price': 'अनुमानित लिस्टिंग प्राइस', 'Expected profit': 'अपेक्षित मुनाफ़ा',
+      'Estimate the money you need and the possible profit from the lots you apply for and the GMP.': 'आप जितने लॉट भरेंगे और GMP के हिसाब से ज़रूरी रकम और संभावित मुनाफ़े का अनुमान।',
+      'GMP & SEBI notice': 'GMP और SEBI सूचना',
+      'Server unavailable · run npm start': 'सर्वर उपलब्ध नहीं · npm start चलाएँ',
+      'Run npm start · open http://localhost:3000': 'npm start चलाएँ · http://localhost:3000 खोलें',
+      'Using sample data · no IPOs returned': 'सैंपल डेटा · कोई IPO नहीं मिला',
+      'Using sample data · live feed unavailable': 'सैंपल डेटा · लाइव फ़ीड उपलब्ध नहीं',
+      'Event data unavailable · retrying': 'इवेंट डेटा उपलब्ध नहीं · फिर से कोशिश हो रही है',
+      'Unofficial GMP · manually maintained · not a live NSE feed': 'अनौपचारिक GMP · मैन्युअल अपडेट · NSE का लाइव डेटा नहीं',
+      'India’s Smart IPO & Earnings Radar': 'भारत का स्मार्ट IPO और नतीजे रडार', 'Live': 'लाइव',
+      'IPO GMP': 'IPO GMP', 'Calculator': 'कैलकुलेटर', 'Brokers': 'ब्रोकर्स',
+      'SPONSORED': 'प्रायोजित', 'See partners': 'पार्टनर देखें', 'Allotment status': 'अलॉटमेंट स्टेटस',
+      'Open a demat account to apply for IPOs. Partner links; offers may change.': 'IPO में आवेदन के लिए डीमैट अकाउंट खोलें। पार्टनर लिंक; ऑफर बदल सकते हैं।',
+      'Current IPO GMP Today': 'आज का IPO GMP',
+      'IPO data refreshes about every 15 minutes. GMP is unofficial and may be delayed.': 'IPO डेटा लगभग हर 15 मिनट में अपडेट होता है। GMP अनौपचारिक है और देरी से मिल सकता है।',
+      'Filter By:': 'फ़िल्टर:', 'SME IPOs': 'SME IPO', 'Apply': 'आवेदन',
+      'Search company (e.g. Swiggy, Tata, NTPC Green)...': 'कंपनी खोजें (जैसे Swiggy, Tata, NTPC Green)...',
+      'Partner offer': 'पार्टनर ऑफर', 'Apply for IPOs with UPI from your broker app': 'अपने ब्रोकर ऐप से UPI द्वारा IPO में आवेदन करें',
+      'Open a demat account with one of our partners. Partner links; we may earn a commission at no extra cost to you.': 'हमारे किसी पार्टनर के साथ डीमैट अकाउंट खोलें। पार्टनर लिंक; आपको कोई अतिरिक्त खर्च नहीं, पर हमें कमीशन मिल सकता है।',
+      'Upcoming Dividends & Corporate Actions': 'आने वाले डिविडेंड और कॉर्पोरेट एक्शन',
+      'Track upcoming ex-dates, bonus share issues and stock split announcements. Data from NSE.': 'आने वाली एक्स-डेट, बोनस शेयर और स्टॉक स्प्लिट की घोषणाएँ देखें। डेटा NSE से।',
+      'Buy before Ex-Date to qualify': 'लाभ के लिए एक्स-डेट से पहले खरीदें',
+      'Company symbol': 'कंपनी सिंबल', 'Action type': 'एक्शन टाइप', 'Dividend / ratio': 'डिविडेंड / अनुपात', 'Record date': 'रिकॉर्ड डेट', 'Trade': 'ट्रेड',
+      'Quarterly Results & Earnings Calendar': 'तिमाही नतीजे और कमाई का कैलेंडर', 'Cards': 'कार्ड', 'Month view': 'महीने का व्यू',
+      'Results': 'नतीजे', 'Purpose': 'उद्देश्य',
+      'Compare Top Demat Accounts for IPOs': 'IPO के लिए टॉप डीमैट अकाउंट की तुलना',
+      'Applying through the demat accounts of several family members can improve your chances of an IPO allotment. These are partner links: we may earn a commission at no extra cost to you.': 'परिवार के कई सदस्यों के डीमैट अकाउंट से आवेदन करने पर IPO अलॉटमेंट की संभावना बढ़ सकती है। ये पार्टनर लिंक हैं: आपको कोई अतिरिक्त खर्च नहीं, पर हमें कमीशन मिल सकता है।'
+    };
+    // Texts that START with these words (the rest, like a company name, is kept as is)
+    const HI_PREFIX = [
+      ['Issue size:', 'इश्यू साइज़:'], ['Subscribed:', 'सब्सक्राइब:'], ['Opens:', 'खुलता:'], ['Closes:', 'बंद:'], ['Allotment:', 'अलॉटमेंट:'],
+      ['Listing:', 'लिस्टिंग:'], ['Market closed:', 'बाज़ार बंद:'], ['Agenda ·', 'एजेंडा ·'], ['Auto-updating · last checked', 'ऑटो-अपडेट · आखिरी जाँच']
+    ];
+    // Texts with numbers inside
+    const HI_PATTERNS = [
+      [/^\+(\d+) more$/, '+$1 और'],
+      [/^Server feed · (\d+) IPOs$/, 'सर्वर फ़ीड · $1 IPO'],
+      [/^ · checked (.+)$/, ' · जाँच: $1'],
+      [/^(\d+) shares$/, '$1 शेयर'], [/^Investment \((\d+) shares\)$/, 'निवेश ($1 शेयर)'],
+      [/ \/ (\d+) lots?$/, ' / $1 लॉट'], [/ · weekend, market closed$/, ' · वीकेंड, बाज़ार बंद']
+    ];
+
+    // English text -> Hindi text (or null when there is no translation)
+    function toHindi(text) {
+      const core = text.replace(/\s+/g, ' ').trim();
+      if (!core) return null;
+      if (HI[core]) return HI[core];
+      const prefix = HI_PREFIX.find(([en]) => core.startsWith(en));
+      if (prefix) return prefix[1] + core.slice(prefix[0].length);
+      for (const [pattern, out] of HI_PATTERNS) if (pattern.test(core)) return core.replace(pattern, out);
+      return null;
+    }
+
+    // Walk all visible text and swap it. Original English is remembered so we can switch back.
+    let hindiApplied = false, translatePending = false;
+    const observer = new MutationObserver(() => {
+      if (translatePending) return;
+      translatePending = true;
+      requestAnimationFrame(() => { translatePending = false; translateDom(); });
+    });
+    const WATCH = { childList: true, subtree: true, characterData: true };
+
+    function translateDom() {
+      if (state.lang === 'en' && !hindiApplied) return;
+      observer.disconnect();                                   // do not react to our own changes
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+        acceptNode: (n) => (n.parentElement && !['SCRIPT', 'STYLE', 'TEXTAREA'].includes(n.parentElement.tagName) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT)
+      });
+      let node;
+      while ((node = walker.nextNode())) {
+        const english = node.__hi !== undefined && node.nodeValue === node.__hi ? node.__en : node.nodeValue;
+        const hindi = state.lang === 'hi' ? toHindi(english) : null;
+        const shown = hindi === null ? english : english.match(/^\s*/)[0] + hindi + english.match(/\s*$/)[0];
+        node.__en = english; node.__hi = shown;
+        if (node.nodeValue !== shown) node.nodeValue = shown;
+      }
+      document.querySelectorAll('[placeholder]').forEach((el) => {
+        el.dataset.enPlaceholder ||= el.placeholder;
+        el.placeholder = (state.lang === 'hi' && HI[el.dataset.enPlaceholder]) || el.dataset.enPlaceholder;
+      });
+      hindiApplied = state.lang === 'hi';
+      observer.observe(document.body, WATCH);
+    }
+
+    function setLang(lang) {
+      state.lang = lang;
+      document.documentElement.lang = lang;
+      $('#lang-btn').textContent = lang === 'hi' ? 'English' : 'हिंदी';
+      try { localStorage.setItem('bb_lang', lang); } catch (e) { /* storage blocked */ }
+      render();                                                // redraw so calendar dates use the right language
+      translateDom();
+    }
+    $('#lang-btn').addEventListener('click', () => setLang(state.lang === 'hi' ? 'en' : 'hi'));
+
+    // =====================================================
+    // 6. LIVE DATA from your server.js (/api/ipos). Falls back to sample data.
+    // =====================================================
+    function loadLive() {
+      if (openedFromFile) {
+        state.loaded = true;
+        return;
+      }
+      fetch('/api/ipos', { cache: 'no-store' })
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`IPO API returned ${r.status}`))))
+        .then((list) => {
+          list = (Array.isArray(list) ? list : []).filter((i) => i && i.id && i.n); // ignore incomplete entries
+          if (!list.length) return;
+          if (JSON.stringify(list) === JSON.stringify(state.ipos)) return; // nothing new
+          state.ipos = list;
+          render();
+        })
+        .catch((error) => {
+          console.warn('Could not load live IPO data; keeping sample data.', error);
+        })
+        .finally(() => { state.loaded = true; if (state.selected) renderDetail(); });
+    }
+
+    renderPartners();
+    $('#copyright-year').textContent = new Date().getFullYear();
+    updateFooterShareLinks();
+    $('#back-to-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    // Market holidays and events come from your server (/api/events); the calendar still works without them
+    function loadEvents() {
+      if (openedFromFile) {
+        const stamp = $('#events-at');
+        if (stamp) stamp.textContent = serverRequiredMessage;
+        return;
+      }
+      fetch('/api/events', { cache: 'no-store' })
+        .then((r) => (r.ok ? r.json() : Promise.reject()))
+        .then((list) => {
+          const clean = (Array.isArray(list) ? list : []).filter((e) => e && e.date && e.title);
+          state.eventsAt = new Date();
+          const stamp = $('#events-at');
+          if (stamp) stamp.textContent = eventsStamp();                  // refresh the "last checked" time
+          if (JSON.stringify(clean) === JSON.stringify(state.events)) return;
+          state.events = clean;
+          render();
+        })
+        .catch((error) => {
+          console.warn('Could not load calendar event data.', error);
+          const stamp = $('#events-at');
+          if (stamp) stamp.textContent = 'Event data unavailable · retrying';
+        });
+    }
+
+    render();
+    loadLive();
+    loadEvents();
+    setInterval(() => { loadLive(); loadEvents(); }, 60000);
+    routeFromUrl();                    // open /ipo/<id>, /about, /privacy... directly if asked
+
+    // Start in the language the visitor chose last time (English by default)
+    let savedLang = 'en';
+    try { savedLang = localStorage.getItem('bb_lang') || 'en'; } catch (e) { /* storage blocked */ }
+    observer.observe(document.body, WATCH);
+    setLang(savedLang === 'hi' ? 'hi' : 'en');
+  </script>
+</body>
+
+</html>-
